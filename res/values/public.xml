@@ -95,7 +95,9 @@
     <public type="layout" name="menu_icon_row" id="0x7f04000b" />
     <public type="layout" name="menu_item" id="0x7f04000c" />
     <public type="layout" name="multi_field_time_picker_dialog" id="0x7f04000d" />
+    <!-- 
     <public type="layout" name="testshell_activity" id="0x7f04000e" />
+     -->
     <public type="layout" name="translate_spinner" id="0x7f04000f" />
     <public type="layout" name="two_field_date_picker" id="0x7f040010" />
     <public type="layout" name="validation_message_bubble" id="0x7f040011" />

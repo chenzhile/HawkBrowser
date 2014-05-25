@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <com.hawkbrowser.browser.ui.LocationBar 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"/>
+    
 	<com.hawkbrowser.render.RenderViewHolder 
 	    android:id="@+id/renderview_holder"
 	    android:layout_width="match_parent"

@@ -137,4 +137,7 @@ You are signing in with a managed account and giving its administrator control o
     
     <!-- new add -->
     <string name="app_name">HawkBrowser</string>
+    <string name="address_input_hint">Search or Input URL</string>
+    <string name="search">Search</string>
+    <string name="Enter">Enter</string>
 </resources>

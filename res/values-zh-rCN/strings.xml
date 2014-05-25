@@ -656,4 +656,7 @@
     <!-- new add -->
     <string name="app_name">HawkBrowser</string>
     <string name="browser_process_initialize_failed">初始化失败</string>
+    <string name="address_input_hint">搜索或输入网址</string>
+    <string name="search">搜索</string>
+    <string name="Enter">进入</string>
 </resources>

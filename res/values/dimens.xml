@@ -21,4 +21,14 @@
     <dimen name="edge_swipe_in_slop">25.0dip</dimen>
     <dimen name="edge_swipe_in_additional_slop">50.0dip</dimen>
     <dimen name="edge_swipe_out_slop">18.0dip</dimen>
+    
+    <!-- new add -->
+    <dimen name="location_bar_height">50.0dip</dimen>
+    <dimen name="location_bar_margin_horizontal">10.0dip</dimen>
+    <dimen name="location_bar_margin_top">5.0dip</dimen>
+    <dimen name="location_bar_margin_bottom">0.0dip</dimen>
+    <dimen name="address_input_margin">5.0dip</dimen>
+    <dimen name="address_input_padding_left">30.0dip</dimen>
+    <dimen name="address_input_padding_vertical">5.0dip</dimen>
+    
 </resources>

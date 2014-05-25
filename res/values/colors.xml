@@ -50,4 +50,7 @@
     <color name="disable_pref_activity">#ff808080</color>
     <color name="new_tab_page_bg">#fff1f1f1</color>
     <color name="webapp_url_bar_scheme">#ff339922</color>
+    
+    <!-- new add -->
+    <color name="location_bar_bg">#fff1f1f1</color>
 </resources>

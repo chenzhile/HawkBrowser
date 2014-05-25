@@ -213,9 +213,16 @@
             </intent-filter>
         </receiver>
 
-        <!--  <provider android:name="org.chromium.chrome.browser.ChromeBrowserProvider"
-                  android:authorities="org.chromium.chrome.testshell"
-                  android:exported="true" /> -->
+        <!--  
+        <provider android:name="com.google.android.apps.chrome.ChromeBrowserProvider" 
+        	android:readPermission="com.android.browser.permission.READ_HISTORY_BOOKMARKS" 
+        	android:writePermission="com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" 
+        	android:exported="true" 
+        	android:authorities="com.android.chrome.ChromeBrowserProvider;com.android.chrome.browser;com.android.chrome">
+        	
+            <path-permission android:readPermission="android.permission.GLOBAL_SEARCH" android:path="/bookmarks/search_suggest_query" />
+        </provider>
+        -->
 
         <!-- Sync adapter for browser sync. -->
         <service android:exported="false"
