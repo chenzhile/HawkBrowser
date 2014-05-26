@@ -97,7 +97,7 @@
             </intent-filter>
             <!--  <meta-data android:name="android.app.searchable" android:resource="@xml/searchable"/> -->
         </activity>
-        
+                
 		<!-- NOTE: If you change the values of "android:process" for any of the below services,
              you also need to update kHelperProcessExecutableName in chrome_constants.cc. -->
         <service android:name="org.chromium.content.app.SandboxedProcessService0"
@@ -240,7 +240,7 @@
                 <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
             </intent-filter>
         </receiver>
-        
+                
     </application>
 
 </manifest>

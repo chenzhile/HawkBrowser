@@ -7,9 +7,13 @@ import android.widget.FrameLayout;
 
 import org.chromium.content.browser.ContentViewRenderView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RenderViewHolder extends FrameLayout {
     
     private RenderView mCurrentView;
+    private List<RenderViewHolderObserver> mObservers = new ArrayList<RenderViewHolderObserver>();
     
     public RenderViewHolder(Context context) {
         super(context);
@@ -31,5 +35,18 @@ public class RenderViewHolder extends FrameLayout {
         
         addView(view.getView());
         mCurrentView = view;
+        
+        for(RenderViewHolderObserver observer : mObservers) {
+            observer.onRenderViewChanged(view);
+        }
     }
+    
+    public void addObserver(RenderViewHolderObserver observer) {
+        mObservers.add(observer);
+    }
+    
+    public void removeObserver(RenderViewHolderObserver observer) {
+        mObservers.remove(observer);
+    }
+    
 }

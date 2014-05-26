@@ -11,10 +11,17 @@ public class RenderViewModel {
     
     private ArrayList<RenderView> mRenderViews = new ArrayList<RenderView>();
 
-    public RenderView createRenderView(Context context, WindowAndroid window) {
+    public RenderView createChromeRenderView(Context context, WindowAndroid window) {
         
         HawkBrowserTab tab = new HawkBrowserTab(context, window);
         ChromeRenderView renderView = new ChromeRenderView(tab);
+        mRenderViews.add(renderView);
+        return renderView;
+    }
+    
+    public RenderView createSystemRenderView(Context context) {
+        
+        SystemRenderView renderView = new SystemRenderView(context, null);
         mRenderViews.add(renderView);
         return renderView;
     }

@@ -9,5 +9,4 @@ public final class Util {
     public static void showToDoMessage(Context context) {
         Toast.makeText(context, "TODO", Toast.LENGTH_SHORT).show();
     }
-    
 }

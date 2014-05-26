@@ -4,19 +4,20 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.hawkbrowser.R;
 import com.hawkbrowser.common.Constants;
 import com.hawkbrowser.common.Util;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class LocationBar extends LinearLayout implements View.OnClickListener, TextWatcher {
         
@@ -30,6 +31,7 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
     private TextView mAction;
     private ActionState mActionState;
     private EditText mInput;
+    private ImageView mClearInput;
         
     public LocationBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -48,14 +50,35 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
         
         findViewById(R.id.locationbar_qrcode).setOnClickListener(this);
         findViewById(R.id.locationbar_speak).setOnClickListener(this);
-        findViewById(R.id.locationbar_clear_input).setOnClickListener(this);
         findViewById(R.id.locationbar_cancel_refresh).setOnClickListener(this);
+        
+        mClearInput = (ImageView) findViewById(R.id.locationbar_clear_input);
+        mClearInput.setOnClickListener(this);
+                
+        mAction = (TextView) findViewById(R.id.locationbar_action);
+        mAction.setOnClickListener(this);
         
         mInput = (EditText) findViewById(R.id.locationbar_input);
         mInput.setOnClickListener(this);
         
-        mAction = (TextView) findViewById(R.id.locationbar_action);
-        mAction.setOnClickListener(this);
+        mInput.addTextChangedListener(this);
+        
+        mInput.setOnEditorActionListener(new OnEditorActionListener() {
+            // on ime go
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId != EditorInfo.IME_ACTION_GO) && (event == null ||
+                        event.getKeyCode() != KeyEvent.KEYCODE_ENTER ||
+                        event.getKeyCode() != KeyEvent.ACTION_DOWN)) {
+                    return false;
+                }
+
+                navigate(mInput.getText().toString());
+                setKeyboardVisibility(false);
+                return true;
+            }
+        });
+        
     }
 
     @Override
@@ -137,7 +160,7 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
     }
     
     private void onClearInput() {
-        findViewById(R.id.locationbar_clear_input).setVisibility(View.VISIBLE);
+        mClearInput.setVisibility(View.GONE);
         
         int color = getContext().getResources().getColor(android.R.color.black);
         mAction.setTextColor(color);
@@ -164,6 +187,9 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
                 mAction.setText(R.string.search);
                 mActionState = ActionState.Search;
             }
+            
+            mClearInput.setVisibility(View.VISIBLE);
+            
         } else {
             onClearInput();
         }
@@ -177,5 +203,16 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         return;
+    }
+    
+    private void setKeyboardVisibility(boolean visible) {
+        
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        if (visible) {
+            imm.showSoftInput(mInput, InputMethodManager.SHOW_IMPLICIT);
+        } else {
+            imm.hideSoftInputFromWindow(mInput.getWindowToken(), 0);
+        }
     }
 }

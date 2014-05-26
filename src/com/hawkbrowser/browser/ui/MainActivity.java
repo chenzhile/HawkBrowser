@@ -4,6 +4,15 @@ package com.hawkbrowser.browser.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.webkit.SslErrorHandler;
+import android.net.http.SslError;
+import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -22,16 +31,49 @@ import org.chromium.ui.base.ActivityWindowAndroid;
 import org.chromium.ui.base.WindowAndroid;
 
 public class MainActivity extends Activity {
-    
+
     private WindowAndroid mWindow;
     private RenderViewHolder mRenderViewHolder;
     private ContentViewRenderView mContentViewRenderView;
     private RenderViewModel mRenderViewModel;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        
+        if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE)
+            startChrome(savedInstanceState);
+        else {
+            setContentView(R.layout.main);
+            initAfterRenderStart();
+        }
+    }
+
+    private void initAfterRenderStart() {
+
+        mRenderViewModel = new RenderViewModel();
+        mRenderViewHolder = (RenderViewHolder) findViewById(R.id.renderview_holder);
+
+        RenderView renderView;
+
+        if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE) {
+            renderView = mRenderViewModel.createChromeRenderView(this, mWindow);
+            mRenderViewHolder.addView(mContentViewRenderView,
+                    new FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.MATCH_PARENT,
+                            FrameLayout.LayoutParams.WRAP_CONTENT));
+            mContentViewRenderView.setCurrentContentView((ContentView) renderView.getView());
+        }
+        else {
+            renderView = mRenderViewModel.createSystemRenderView(this);
+        }
+
+        mRenderViewHolder.setCurrentRenderView(renderView);
+        renderView.loadUrl(Constants.HOME_PAGE_URL);
+    }
+
+    private void startChrome(final Bundle savedInstanceState) {
 
         BrowserStartupController.StartupCallback callback =
                 new BrowserStartupController.StartupCallback() {
@@ -64,7 +106,7 @@ public class MainActivity extends Activity {
 
     private void onChromeStartSucceed(Bundle savedInstanceState) {
         setContentView(R.layout.main);
-               
+
         mWindow = new ActivityWindowAndroid(this);
         mWindow.restoreInstanceState(savedInstanceState);
 
@@ -74,35 +116,24 @@ public class MainActivity extends Activity {
             }
         };
 
-        mRenderViewHolder = (RenderViewHolder) findViewById(R.id.renderview_holder);
-        mRenderViewHolder.addView(mContentViewRenderView,
-                new FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT));
-
-        mRenderViewModel = new RenderViewModel();
-        RenderView renderView = mRenderViewModel.createRenderView(this, mWindow);
-        mRenderViewHolder.setCurrentRenderView(renderView);
-        mContentViewRenderView.setCurrentContentView((ContentView)renderView.getView());
-        
-        renderView.loadUrl(Constants.HOME_PAGE_URL);
+        initAfterRenderStart();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        
-        if(null != mRenderViewModel) {
+
+        if (null != mRenderViewModel) {
             mRenderViewModel.destroy();
             mRenderViewModel = null;
         }
-        
-        if(null != mContentViewRenderView) {
+
+        if (null != mContentViewRenderView) {
             mContentViewRenderView.destroy();
             mContentViewRenderView = null;
         }
-        
-        if(null != mWindow) {
+
+        if (null != mWindow) {
             mWindow.destroy();
             mWindow = null;
         }

@@ -9,7 +9,6 @@ import org.chromium.base.BaseSwitches;
 import org.chromium.base.CommandLine;
 import org.chromium.base.PathUtils;
 import org.chromium.chrome.browser.ChromiumApplication;
-import org.chromium.chrome.browser.invalidation.UniqueIdInvalidationClientNameGenerator;
 import org.chromium.content.browser.ResourceExtractor;
 
 public class HawkBrowserApplication extends ChromiumApplication {
@@ -30,32 +29,40 @@ public class HawkBrowserApplication extends ChromiumApplication {
         // We want to do this at the earliest possible point in startup.
         super.onCreate();
 
-        ResourceExtractor.setMandatoryPaksToExtract(CHROME_MANDATORY_PAKS);
-        PathUtils.setPrivateDataDirectorySuffix(PRIVATE_DATA_DIRECTORY_SUFFIX);
+        if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE) {
+            ResourceExtractor.setMandatoryPaksToExtract(CHROME_MANDATORY_PAKS);
+            PathUtils.setPrivateDataDirectorySuffix(PRIVATE_DATA_DIRECTORY_SUFFIX);
 
-        // Initialize the invalidations ID, just like we would in the downstream code.
-//        UniqueIdInvalidationClientNameGenerator.doInitializeAndInstallGenerator(this);
+            // Initialize the invalidations ID, just like we would in the downstream code.
+            //        UniqueIdInvalidationClientNameGenerator.doInitializeAndInstallGenerator(this);
 
-        initCommandLine();
+            initCommandLine();
 
-        waitForDebuggerIfNeeded();
+            waitForDebuggerIfNeeded();
+        }
     }
 
     public static void initCommandLine() {
-        if (!CommandLine.isInitialized())
-            CommandLine.initFromFile(COMMAND_LINE_FILE);
+
+        if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE) {
+            if (!CommandLine.isInitialized())
+                CommandLine.initFromFile(COMMAND_LINE_FILE);
+        }
     }
 
     private void waitForDebuggerIfNeeded() {
-        if (CommandLine.getInstance().hasSwitch(BaseSwitches.WAIT_FOR_JAVA_DEBUGGER)) {
 
-            if (Config.LOG_ENABLED)
-                Log.e(Config.LOG_TAG, "Waiting for Java debugger to connect...");
+        if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE) {
+            if (CommandLine.getInstance().hasSwitch(BaseSwitches.WAIT_FOR_JAVA_DEBUGGER)) {
 
-            android.os.Debug.waitForDebugger();
+                if (Config.LOG_ENABLED)
+                    Log.e(Config.LOG_TAG, "Waiting for Java debugger to connect...");
 
-            if (Config.LOG_ENABLED)
-                Log.e(Config.LOG_TAG, "Java debugger connected. Resuming execution.");
+                android.os.Debug.waitForDebugger();
+
+                if (Config.LOG_ENABLED)
+                    Log.e(Config.LOG_TAG, "Java debugger connected. Resuming execution.");
+            }
         }
     }
 
