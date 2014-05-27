@@ -5,8 +5,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import org.chromium.content.browser.ContentViewRenderView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,19 +32,19 @@ public class RenderViewHolder extends FrameLayout {
         }
         
         addView(view.getView());
-        mCurrentView = view;
         
         for(RenderViewHolderObserver observer : mObservers) {
-            observer.onRenderViewChanged(view);
+            observer.onRenderViewChanged(mCurrentView, view);
         }
+        
+        mCurrentView = view;
     }
-    
+        
     public void addObserver(RenderViewHolderObserver observer) {
         mObservers.add(observer);
     }
     
     public void removeObserver(RenderViewHolderObserver observer) {
         mObservers.remove(observer);
-    }
-    
+    }    
 }

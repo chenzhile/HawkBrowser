@@ -7,4 +7,8 @@
     <integer name="select_bookmark_folder_max_depth_indent">5</integer>
     <integer name="over_scroll_angle">15</integer>
     <integer name="fre_long_duration_ms">750</integer>
+    
+    <!-- new add -->
+    <integer name="locationbar_progressbar_max">80</integer>
+    
 </resources>

@@ -4,15 +4,7 @@ package com.hawkbrowser.browser.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.webkit.SslErrorHandler;
-import android.net.http.SslError;
-import android.widget.AbsoluteLayout;
+import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -30,13 +22,22 @@ import org.chromium.content.common.ProcessInitException;
 import org.chromium.ui.base.ActivityWindowAndroid;
 import org.chromium.ui.base.WindowAndroid;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements ToolbarObserver {
 
     private WindowAndroid mWindow;
     private RenderViewHolder mRenderViewHolder;
     private ContentViewRenderView mContentViewRenderView;
     private RenderViewModel mRenderViewModel;
-
+    private Toolbar mToolbar;
+    
+    private ToolbarObserver mToolbarObserver = new ToolbarObserver() {
+        
+        @Override
+        public void onQuit() {
+            
+        }
+    };
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -54,6 +55,13 @@ public class MainActivity extends Activity {
 
         mRenderViewModel = new RenderViewModel();
         mRenderViewHolder = (RenderViewHolder) findViewById(R.id.renderview_holder);
+        
+        LocationBar locationBar = (LocationBar) findViewById(R.id.locationbar);
+        mRenderViewHolder.addObserver(locationBar);
+        
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mRenderViewHolder.addObserver(mToolbar);
+        mToolbar.setToolbarObserver(mToolbarObserver);
 
         RenderView renderView;
 
@@ -120,8 +128,19 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        
+        if(mToolbar.onKeyUp(keyCode, event))
+            return true;
+        
+        return super.onKeyUp(keyCode, event);
+    }
+    
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        
+        mToolbar.setToolbarObserver(null);
 
         if (null != mRenderViewModel) {
             mRenderViewModel.destroy();
@@ -137,6 +156,11 @@ public class MainActivity extends Activity {
             mWindow.destroy();
             mWindow = null;
         }
+    }
+
+    @Override
+    public void onQuit() {
+        
     }
 
 }

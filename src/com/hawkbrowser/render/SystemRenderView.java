@@ -8,7 +8,7 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-public class SystemRenderView implements RenderView {
+public class SystemRenderView extends RenderView {
 
     private WebView mWebView;
 
@@ -35,11 +35,43 @@ public class SystemRenderView implements RenderView {
     public void requestFocus() {
         mWebView.requestFocus();
     }
+    
+    @Override
+    public boolean canGoBack() {
+        return mWebView.canGoBack();
+    }
+    
+    @Override
+    public void goBack() {
+        mWebView.goBack();
+    }
+    
+    @Override
+    public boolean canGoForward() {
+        return mWebView.canGoForward();
+    }
+    
+    @Override
+    public void goForward() {
+        mWebView.goForward();
+    }
+    
+    @Override
+    public void stopLoading() {
+        mWebView.stopLoading();
+    }
+    
+    @Override
+    public void reload() {
+        mWebView.reload();
+    }
+
 
     @Override
     public void destroy() {
+        super.destroy();
+        
         mWebView.destroy();
         mWebView = null;
     }
-
 }

@@ -29,7 +29,11 @@
     <dimen name="location_bar_margin_bottom">0.0dip</dimen>
     <dimen name="address_input_margin">5.0dip</dimen>
     <dimen name="address_input_padding_left">35.0dip</dimen>
+    <dimen name="address_input_padding_right">35.0dip</dimen>
     <dimen name="address_input_padding_vertical">5.0dip</dimen>
     <dimen name="address_input_left_margin">3.0dip</dimen>
+    <dimen name="locationbar_progressbar_height">2dp</dimen>
+    <dimen name="toolbar_height">50.0dip</dimen>
+    <dimen name="toolbar_btn_width">40.0dip</dimen>
     
 </resources>

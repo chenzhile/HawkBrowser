@@ -53,4 +53,5 @@
     
     <!-- new add -->
     <color name="location_bar_bg">#fff1f1f1</color>
+    <color name="toolbar_bg">#fff1f1f1</color>
 </resources>

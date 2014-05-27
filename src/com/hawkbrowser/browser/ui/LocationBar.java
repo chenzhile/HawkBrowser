@@ -12,14 +12,19 @@ import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.hawkbrowser.R;
 import com.hawkbrowser.common.Constants;
 import com.hawkbrowser.common.Util;
+import com.hawkbrowser.render.RenderView;
+import com.hawkbrowser.render.RenderViewHolderObserver;
+import com.hawkbrowser.render.RenderViewObserverImpl;
 
-public class LocationBar extends LinearLayout implements View.OnClickListener, TextWatcher {
+public class LocationBar extends LinearLayout 
+    implements View.OnClickListener, TextWatcher, RenderViewHolderObserver {
         
     enum ActionState {
         None,
@@ -28,10 +33,54 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
         Search
     }
     
+    class LocationBarRenderViewObserver extends RenderViewObserverImpl {
+        
+        @Override
+        public void onUpdateUrl(RenderView view, String url) {
+            
+            assert view == renderView();
+            mInput.setText(url);
+        }
+        
+        @Override
+        public void onLoadProgressChanged(RenderView view, int progress) {
+            
+            assert view == renderView();
+            
+            if(mProgressBar.getVisibility() != View.VISIBLE) {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+            
+            mProgressBar.setProgress(progress);
+        }
+        
+        @Override
+        public void didStartLoading(RenderView view, String url) {
+            
+            assert view == renderView();
+            mCancelRefresh.setImageResource(R.drawable.locationbar_cancel);
+            mProgressBar.setVisibility(View.VISIBLE);
+            mDuringNavigation = true;
+        }
+
+        @Override
+        public void didStopLoading(RenderView view, String url) {
+            
+            assert view == renderView();
+            mCancelRefresh.setImageResource(R.drawable.locationbar_refresh);
+            mProgressBar.setVisibility(View.GONE);
+            mDuringNavigation = false;
+        }
+    }
+    
     private TextView mAction;
     private ActionState mActionState;
     private EditText mInput;
     private ImageView mClearInput;
+    private ImageView mCancelRefresh;
+    private ProgressBar mProgressBar;
+    private boolean mDuringNavigation;
+    private LocationBarRenderViewObserver mRenderViewObserver;
         
     public LocationBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -43,14 +92,19 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
     }
     
     private void init() {
-        
+               
         mActionState = ActionState.None;
+        mRenderViewObserver = new LocationBarRenderViewObserver();
         
         inflate(getContext(), R.layout.locationbar, this);
         
         findViewById(R.id.locationbar_qrcode).setOnClickListener(this);
         findViewById(R.id.locationbar_speak).setOnClickListener(this);
-        findViewById(R.id.locationbar_cancel_refresh).setOnClickListener(this);
+        
+        mProgressBar = (ProgressBar) findViewById(R.id.locationbar_progressbar);
+        
+        mCancelRefresh = (ImageView) findViewById(R.id.locationbar_cancel_refresh);
+        mCancelRefresh.setOnClickListener(this);
         
         mClearInput = (ImageView) findViewById(R.id.locationbar_clear_input);
         mClearInput.setOnClickListener(this);
@@ -101,6 +155,10 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
             }
             
             case R.id.locationbar_cancel_refresh: {
+                if(mDuringNavigation) 
+                    mRenderViewObserver.renderView().stopLoading();
+                else
+                    mRenderViewObserver.renderView().reload();
                 return;
             }
             
@@ -116,7 +174,7 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
         switch(mActionState){
             case Cancel: {
                 findViewById(R.id.locationbar_action).setVisibility(View.GONE);
-                findViewById(R.id.locationbar_cancel_refresh).setVisibility(View.VISIBLE);
+                mCancelRefresh.setVisibility(View.VISIBLE);
                 return;
             }
                 
@@ -139,10 +197,11 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
         
         findViewById(R.id.locationbar_action).setVisibility(View.GONE);
         
-        ImageView cancelRefresh = (ImageView) findViewById(R.id.locationbar_cancel_refresh);
-        cancelRefresh.setImageResource(R.drawable.locationbar_cancel);
+        mCancelRefresh.setImageResource(R.drawable.locationbar_cancel);
         
-        cancelRefresh.setVisibility(View.VISIBLE);
+        mCancelRefresh.setVisibility(View.VISIBLE);
+        
+        mRenderViewObserver.renderView().loadUrl(url);
     }
     
     private void onClickInput() {
@@ -215,4 +274,11 @@ public class LocationBar extends LinearLayout implements View.OnClickListener, T
             imm.hideSoftInputFromWindow(mInput.getWindowToken(), 0);
         }
     }
+
+    @Override
+    public void onRenderViewChanged(RenderView oldView, RenderView newView) {
+        
+        mRenderViewObserver.onRenderViewChanged(oldView, newView);
+    }
+    
 }

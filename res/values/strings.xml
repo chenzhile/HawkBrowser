@@ -139,5 +139,15 @@ You are signing in with a managed account and giving its administrator control o
     <string name="app_name">HawkBrowser</string>
     <string name="address_input_hint">Search or Input URL</string>
     <string name="search">Search</string>
-    <string name="Enter">Enter</string>
+    <string name="enter">Enter</string>
+	<string name="back">back</string>
+    <string name="forward">forward</string>
+    <string name="menu">menu</string>
+    <string name="home">home</string>
+    <string name="selectwindow">windows</string>
+    <string name="scan_qrcode">scan qrcode</string>
+    <string name="speak_search">speek search</string>
+    <string name="clear_input">clear input</string>
+    <string name="refresh_cancel">refresh or cancel</string>
+    <string name="press_again_to_exit">Press again to exit</string>
 </resources>
