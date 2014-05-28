@@ -57,7 +57,7 @@
 	<TableRow
         android:id="@+id/popmenu_menubar_right_row2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="@dimen/popup_menubar_margin" >
 
         <Button

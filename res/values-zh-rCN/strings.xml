@@ -675,7 +675,7 @@
 	<string name="exit">退出</string>
 	<string name="setting">设置</string>
 	<string name="night_mode">夜间模式</string>
-	<string name="noimage_mode">无图模式</string>
+	<string name="imageless_mode">无图模式</string>
 	<string name="fullscreen">全屏模式</string>
 	<string name="file">文件</string>
 </resources>
