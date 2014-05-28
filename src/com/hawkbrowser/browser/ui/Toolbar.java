@@ -19,16 +19,59 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
     private View mBack;
     private View mForward;
     private long mPrevBackKeyUpTime;
-    private RenderViewObserverImpl mRenderViewObserver;
-    private ToolbarObserver mToolbarObserver;
+    private Observer mToolbarObserver;
+    private PopupMenuBar mPopupMenuBar;
 
-    class ToolbarRenderViewObserver extends RenderViewObserverImpl {
+    public interface Observer {
+        void onQuit();
+    }
+
+    private RenderViewObserverImpl mRenderViewObserver = new RenderViewObserverImpl() {
 
         @Override
         public void didStopLoading(RenderView view, String url) {
             updateBackForwardStatus(renderView());
         }
-    }
+    };
+
+    private PopupMenuBar.Observer mPopupMenuBarObserver = new PopupMenuBar.Observer() {
+
+        @Override
+        public void onShowSetting() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onShowDownloadMgr() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onShowBookmark() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onRefresh() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onQuit() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onAddBookmark() {
+            // TODO Auto-generated method stub
+
+        }
+    };
 
     public Toolbar(Context context) {
         this(context, null);
@@ -45,21 +88,19 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
 
         mBack = findViewById(R.id.toolbar_back);
         mBack.setOnClickListener(this);
-        
+
         mForward = findViewById(R.id.toolbar_forward);
         mForward.setOnClickListener(this);
-        
+
         findViewById(R.id.toolbar_home).setOnClickListener(this);
         findViewById(R.id.toolbar_menu).setOnClickListener(this);
         findViewById(R.id.toolbar_selectview).setOnClickListener(this);
-
-        mRenderViewObserver = new ToolbarRenderViewObserver();
     }
 
-    public void setToolbarObserver(ToolbarObserver observer) {
+    public void setToolbarObserver(Observer observer) {
         mToolbarObserver = observer;
     }
-    
+
     @Override
     public void onClick(View v) {
 
@@ -80,7 +121,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
             }
 
             case R.id.toolbar_menu: {
-                Util.showToDoMessage(getContext());
+                onToolbarMenu();
                 break;
             }
 
@@ -88,6 +129,19 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
                 Util.showToDoMessage(getContext());
                 break;
             }
+        }
+    }
+
+    private void onToolbarMenu() {
+
+        if (null == mPopupMenuBar)
+            mPopupMenuBar = new PopupMenuBar(getContext(), mPopupMenuBarObserver);
+
+        if (mPopupMenuBar.isShow())
+            mPopupMenuBar.dismiss();
+        else {
+            View anchor = findViewById(R.id.toolbar_menu);
+            mPopupMenuBar.show(anchor);
         }
     }
 
@@ -108,8 +162,8 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
             Toast.makeText(getContext(), R.string.press_again_to_exit,
                     Toast.LENGTH_SHORT).show();
             return true;
-        } 
-        
+        }
+
         return false;
     }
 

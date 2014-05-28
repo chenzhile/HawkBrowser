@@ -22,22 +22,14 @@ import org.chromium.content.common.ProcessInitException;
 import org.chromium.ui.base.ActivityWindowAndroid;
 import org.chromium.ui.base.WindowAndroid;
 
-public class MainActivity extends Activity implements ToolbarObserver {
+public class MainActivity extends Activity implements Toolbar.Observer {
 
     private WindowAndroid mWindow;
     private RenderViewHolder mRenderViewHolder;
     private ContentViewRenderView mContentViewRenderView;
     private RenderViewModel mRenderViewModel;
     private Toolbar mToolbar;
-    
-    private ToolbarObserver mToolbarObserver = new ToolbarObserver() {
         
-        @Override
-        public void onQuit() {
-            
-        }
-    };
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -61,7 +53,7 @@ public class MainActivity extends Activity implements ToolbarObserver {
         
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mRenderViewHolder.addObserver(mToolbar);
-        mToolbar.setToolbarObserver(mToolbarObserver);
+        mToolbar.setToolbarObserver(this);
 
         RenderView renderView;
 
@@ -78,6 +70,7 @@ public class MainActivity extends Activity implements ToolbarObserver {
         }
 
         mRenderViewHolder.setCurrentRenderView(renderView);
+        
         renderView.loadUrl(Constants.HOME_PAGE_URL);
     }
 

@@ -24,6 +24,7 @@ public class SystemRenderView extends RenderView {
     @Override
     public void loadUrl(String url) {
         mWebView.loadUrl(url);
+        requestFocus();
     }
 
     @Override

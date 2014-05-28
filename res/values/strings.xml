@@ -150,4 +150,17 @@ You are signing in with a managed account and giving its administrator control o
     <string name="clear_input">clear input</string>
     <string name="refresh_cancel">refresh or cancel</string>
     <string name="press_again_to_exit">Press again to exit</string>
+    <string name="addbookmark">Add Bookmark</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="history">History</string>
+    <string name="refresh">Refresh</string>
+    <string name="personal_center">Personal Center</string>
+    <string name="download">Download</string>
+    <string name="share">Share</string>
+    <string name="exit">Exit</string>
+    <string name="setting">Setting</string>
+    <string name="night_mode">Night Mode</string>
+    <string name="imageless_mode">Imageless Mode</string>
+    <string name="fullscreen">Fullscreen</string>
+    <string name="file">File</string>
 </resources>

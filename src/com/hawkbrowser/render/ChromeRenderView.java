@@ -110,6 +110,7 @@ public class ChromeRenderView extends RenderView {
         }
 
         mImpl.loadUrlWithSanitization(url);
+        requestFocus();
     }
 
     @Override

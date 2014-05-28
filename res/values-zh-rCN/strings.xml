@@ -665,4 +665,17 @@
     <string name="home">主页</string>
     <string name="selectwindow">选择标签</string>
     <string name="press_again_to_exit">再按一次退出</string>
+    <string name="addbookmark">添加书签</string>
+	<string name="bookmark">书签</string>
+	<string name="history">历史</string>
+	<string name="refresh">刷新</string>
+	<string name="personal_center">个人中心</string>
+	<string name="download">下载</string>
+	<string name="share">分享</string>
+	<string name="exit">退出</string>
+	<string name="setting">设置</string>
+	<string name="night_mode">夜间模式</string>
+	<string name="noimage_mode">无图模式</string>
+	<string name="fullscreen">全屏模式</string>
+	<string name="file">文件</string>
 </resources>

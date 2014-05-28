@@ -35,5 +35,10 @@
     <dimen name="locationbar_progressbar_height">2dp</dimen>
     <dimen name="toolbar_height">50.0dip</dimen>
     <dimen name="toolbar_btn_width">40.0dip</dimen>
+    <dimen name="popup_menubar_margin">8dip</dimen>
+    <dimen name="popup_menubar_textsize">12.0sp</dimen>
+    <dimen name="popup_menubar_btn_width">75.0dip</dimen>
+    <dimen name="popup_menubar_btn_height">63.0dip</dimen>
+    <dimen name="popup_menubar_height">140dp</dimen>
     
 </resources>
