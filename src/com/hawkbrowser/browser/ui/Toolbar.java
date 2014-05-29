@@ -175,8 +175,11 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
 
     private void onToolbarMenu() {
 
-        if (null == mPopupMenuBar)
-            mPopupMenuBar = new PopupMenuBar(getContext(), mPopupMenuBarObserver);
+        if (null == mPopupMenuBar) {
+            View renderView = mRenderViewObserver.renderView().getView();
+            mPopupMenuBar = new PopupMenuBar(getContext(), 
+                    renderView.getWidth(), renderView.getHeight(), mPopupMenuBarObserver);
+        }
 
         if (mPopupMenuBar.isShow())
             mPopupMenuBar.dismiss();

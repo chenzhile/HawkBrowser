@@ -5,11 +5,14 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -23,6 +26,7 @@ public class PopupMenuBar implements View.OnClickListener,
 
     private ViewGroup mView;
     private ViewFlipper mViewFlipper;
+    private View mOverlayView;
     private View mLeftView;
     private View mRightView;
     private View mLeftSpinner;
@@ -30,13 +34,17 @@ public class PopupMenuBar implements View.OnClickListener,
     private PopupWindow mPopup;
     private PopupMenuBarObserver mObserver;
     private GestureDetector mGestureDetector;
+    private int mWidth;
+    private int mHeight;
 
-    public PopupMenuBar(Context context) {
-        this(context, null);
+    public PopupMenuBar(Context context, int width, int height) {
+        this(context, width, height, null);
     }
 
-    public PopupMenuBar(Context context, PopupMenuBarObserver observer) {
+    public PopupMenuBar(Context context, int width, int height, PopupMenuBarObserver observer) {
         mObserver = observer;
+        mWidth = width;
+        mHeight = height;
 
         init(context);
     }
@@ -47,10 +55,15 @@ public class PopupMenuBar implements View.OnClickListener,
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         mView = (ViewGroup) li.inflate(R.layout.popup_menubar, null);
+        
         mLeftView = li.inflate(R.layout.popup_menubar_leftview, null);
         mRightView = li.inflate(R.layout.popup_menubar_rightview, null);
         
         mAnimationDuration = context.getResources().getInteger(R.integer.popup_menubar_animation_time);
+        
+        mOverlayView = mView.findViewById(R.id.popup_menubar_overlay);
+        mOverlayView.setOnClickListener(this);
+        mOverlayView.setOnTouchListener(this);
 
         initFlipper();
         initBtnListener((TableLayout) mLeftView);
@@ -163,11 +176,8 @@ public class PopupMenuBar implements View.OnClickListener,
     }
 
     public void show(View anchor) {
-        if (null == mPopup) {
-            Point screenSize = Util.screenSize(mView.getContext());
-            Resources rs = mView.getContext().getResources();
-            int height = rs.getDimensionPixelSize(R.dimen.popup_menubar_height);
-            mPopup = new PopupWindow(mView, screenSize.x, height);
+        if (null == mPopup) {                                
+            mPopup = new PopupWindow(mView, mWidth, mHeight);
             mPopup.showAsDropDown(anchor, 0, 0);
         }
     }
@@ -251,10 +261,21 @@ public class PopupMenuBar implements View.OnClickListener,
     //------------------ View.OnTouchListener -------------------
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (mGestureDetector.onTouchEvent(event))
+        
+        if(v == mOverlayView) {
+            
+            if(event.getAction() == MotionEvent.ACTION_UP)
+                dismiss();
+            
             return true;
-
-        return false;
+        }
+        
+        boolean handled = mGestureDetector.onTouchEvent(event);
+        
+        if(v != mLeftView && v != mRightView && handled) {
+            v.setPressed(false);
+        }
+        
+        return handled;
     }
-
 }

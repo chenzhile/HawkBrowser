@@ -2,43 +2,57 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@android:color/transparent"
     android:orientation="vertical" >
     
-    <LinearLayout
-        android:id="@+id/popup_menubar_spinner"
+    <View
+        android:id="@+id/popup_menubar_overlay"
         android:layout_width="match_parent"
-        android:layout_height="2.0dip"
-        android:background="@android:color/darker_gray"
-        android:orientation="horizontal" >
+        android:layout_height="0dip"
+        android:background ="@color/semi_transparent"
+        android:layout_weight="1" />
         
-		<Spinner
-			android:id="@+id/popup_menubar_spinner_left"
-		    android:layout_width="match_parent"
-		    android:layout_height="match_parent"
-		    android:layout_weight="1"
-		    android:background="@android:color/holo_blue_light" />
-		
-		<View
-		    android:id="@+id/popup_menubar_spinner_right"
-		    android:layout_weight="1" 
-		    android:visibility="invisible"
-		    android:layout_height="0dip"
-		    android:layout_width="match_parent"
-		    />		
-	</LinearLayout>
-
-	<ViewFlipper
-	    android:id="@+id/popup_menubar_viewflipper" 
-	    android:layout_weight="1"
-	    android:layout_width="match_parent"
-	    android:layout_height="0.0dip" >
-	</ViewFlipper>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/popup_menubar_height"
+        android:background="@android:color/white"
+        android:orientation="vertical" >
+        
+	    <LinearLayout
+	        android:id="@+id/popup_menubar_spinner"
+	        android:layout_width="match_parent"
+	        android:layout_height="2.0dip"
+	        android:background="@android:color/darker_gray"
+	        android:orientation="horizontal" >
+	        
+			<Spinner
+				android:id="@+id/popup_menubar_spinner_left"
+			    android:layout_width="match_parent"
+			    android:layout_height="match_parent"
+			    android:layout_weight="1"
+			    android:background="@android:color/holo_blue_light" />
+			
+			<View
+			    android:id="@+id/popup_menubar_spinner_right"
+			    android:layout_weight="1" 
+			    android:visibility="invisible"
+			    android:layout_height="0dip"
+			    android:layout_width="match_parent"
+			    />		
+		</LinearLayout>
 	
-	<Spinner
-   	    android:id="@+id/popup_menubar_bottom_spinner"
-   	    android:layout_width="match_parent"
-   	    android:layout_height="0.5dip"
-   	    android:background="@android:color/black" />
+		<ViewFlipper
+		    android:id="@+id/popup_menubar_viewflipper" 
+		    android:layout_weight="1"
+		    android:layout_width="match_parent"
+		    android:layout_height="0.0dip" >
+		</ViewFlipper>
+		
+		<Spinner
+	   	    android:id="@+id/popup_menubar_bottom_spinner"
+	   	    android:layout_width="match_parent"
+	   	    android:layout_height="0.5dip"
+	   	    android:background="@android:color/black" />
+	</LinearLayout>
 
 </LinearLayout>
