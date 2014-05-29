@@ -23,7 +23,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
     private PopupMenuBar mPopupMenuBar;
 
     public interface Observer {
-        void onQuit();
+        void onExit();
     }
 
     private RenderViewObserverImpl mRenderViewObserver = new RenderViewObserverImpl() {
@@ -34,7 +34,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
         }
     };
 
-    private PopupMenuBar.Observer mPopupMenuBarObserver = new PopupMenuBar.Observer() {
+    private PopupMenuBarObserver mPopupMenuBarObserver = new PopupMenuBarObserver() {
 
         @Override
         public void onShowSetting() {
@@ -56,18 +56,59 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
 
         @Override
         public void onRefresh() {
-            // TODO Auto-generated method stub
-
+            mRenderViewObserver.renderView().reload();
         }
 
         @Override
-        public void onQuit() {
-            // TODO Auto-generated method stub
-
+        public void onExit() {
+            if (null != mToolbarObserver)
+                mToolbarObserver.onExit();
         }
 
         @Override
         public void onAddBookmark() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onShowHistory() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onShowPersonalCenter() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onShare() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onNightMode() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onImagelessMode() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onFullScreen() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onShowFileMgr() {
             // TODO Auto-generated method stub
 
         }

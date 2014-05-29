@@ -3,6 +3,7 @@ package com.hawkbrowser.browser.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
@@ -29,12 +30,12 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     private ContentViewRenderView mContentViewRenderView;
     private RenderViewModel mRenderViewModel;
     private Toolbar mToolbar;
-        
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        
+
         if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE)
             startChrome(savedInstanceState);
         else {
@@ -47,10 +48,10 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         mRenderViewModel = new RenderViewModel();
         mRenderViewHolder = (RenderViewHolder) findViewById(R.id.renderview_holder);
-        
+
         LocationBar locationBar = (LocationBar) findViewById(R.id.locationbar);
         mRenderViewHolder.addObserver(locationBar);
-        
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mRenderViewHolder.addObserver(mToolbar);
         mToolbar.setToolbarObserver(this);
@@ -70,7 +71,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
         }
 
         mRenderViewHolder.setCurrentRenderView(renderView);
-        
+
         renderView.loadUrl(Constants.HOME_PAGE_URL);
     }
 
@@ -122,17 +123,17 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        
-        if(mToolbar.onKeyUp(keyCode, event))
+
+        if (mToolbar.onKeyUp(keyCode, event))
             return true;
-        
+
         return super.onKeyUp(keyCode, event);
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        
+
         mToolbar.setToolbarObserver(null);
 
         if (null != mRenderViewModel) {
@@ -152,8 +153,14 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     }
 
     @Override
-    public void onQuit() {
-        
+    public void onExit() {
+        new Handler().post(new Runnable() {
+
+            @Override
+            public void run() {
+                finish();
+            }
+        });
     }
 
 }

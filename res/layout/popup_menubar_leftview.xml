@@ -13,7 +13,7 @@
         android:layout_margin="@dimen/popup_menubar_margin" >
 
         <Button
-            android:id="@+id/popmenu_addbookmark"
+            android:id="@+id/popup_menubar_addbookmark"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -24,7 +24,7 @@
             android:textSize="@dimen/popup_menubar_textsize" />
 
         <Button
-            android:id="@+id/popmenu_bookmark"
+            android:id="@+id/popup_menubar_bookmark"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -61,7 +61,7 @@
         android:layout_margin="@dimen/popup_menubar_margin" >
 
 		<Button
-            android:id="@+id/popmenu_personalcenter"
+            android:id="@+id/popup_menubar_personalcenter"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -72,7 +72,7 @@
             android:textSize="@dimen/popup_menubar_textsize" />
 
         <Button
-            android:id="@+id/popmenu_download"
+            android:id="@+id/popup_menubar_download"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
