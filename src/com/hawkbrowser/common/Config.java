@@ -13,5 +13,5 @@ public final class Config {
         Chrome
     }
     
-    public static RenderViewType RENDER_VIEW_TYPE = RenderViewType.Chrome;
+    public static RenderViewType RENDER_VIEW_TYPE = RenderViewType.System;
 }
