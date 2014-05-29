@@ -23,28 +23,33 @@ public class HawkBrowserApplication extends ChromiumApplication {
 
     private static final String COMMAND_LINE_FILE =
             "/data/local/tmp/hawkbrowser-command-line";
-
+    
     @Override
     public void onCreate() {
         // We want to do this at the earliest possible point in startup.
         super.onCreate();
 
-        if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE) {
-            ResourceExtractor.setMandatoryPaksToExtract(CHROME_MANDATORY_PAKS);
-            PathUtils.setPrivateDataDirectorySuffix(PRIVATE_DATA_DIRECTORY_SUFFIX);
-
-            // Initialize the invalidations ID, just like we would in the downstream code.
-            //        UniqueIdInvalidationClientNameGenerator.doInitializeAndInstallGenerator(this);
-
-            initCommandLine();
-
+        if (Config.UseChromeRender) {
+            
+            initChromeResource();
             waitForDebuggerIfNeeded();
         }
+    }
+    
+    public static void initChromeResource() {
+        
+        ResourceExtractor.setMandatoryPaksToExtract(CHROME_MANDATORY_PAKS);
+        PathUtils.setPrivateDataDirectorySuffix(PRIVATE_DATA_DIRECTORY_SUFFIX);
+
+        // Initialize the invalidations ID, just like we would in the downstream code.
+        //        UniqueIdInvalidationClientNameGenerator.doInitializeAndInstallGenerator(this);
+
+        initCommandLine();
     }
 
     public static void initCommandLine() {
 
-        if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE) {
+        if (Config.UseChromeRender) {
             if (!CommandLine.isInitialized())
                 CommandLine.initFromFile(COMMAND_LINE_FILE);
         }
@@ -52,7 +57,7 @@ public class HawkBrowserApplication extends ChromiumApplication {
 
     private void waitForDebuggerIfNeeded() {
 
-        if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE) {
+        if (Config.UseChromeRender) {
             if (CommandLine.getInstance().hasSwitch(BaseSwitches.WAIT_FOR_JAVA_DEBUGGER)) {
 
                 if (Config.LOG_ENABLED)

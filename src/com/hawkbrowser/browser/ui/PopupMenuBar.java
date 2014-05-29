@@ -19,6 +19,7 @@ import android.widget.TableRow;
 import android.widget.ViewFlipper;
 
 import com.hawkbrowser.R;
+import com.hawkbrowser.common.Config;
 import com.hawkbrowser.common.Util;
 
 public class PopupMenuBar implements View.OnClickListener,
@@ -30,6 +31,7 @@ public class PopupMenuBar implements View.OnClickListener,
     private View mLeftView;
     private View mRightView;
     private View mLeftSpinner;
+    private Button mSwitchRenderBtn;
     private long mAnimationDuration;
     private PopupWindow mPopup;
     private PopupMenuBarObserver mObserver;
@@ -58,6 +60,7 @@ public class PopupMenuBar implements View.OnClickListener,
         
         mLeftView = li.inflate(R.layout.popup_menubar_leftview, null);
         mRightView = li.inflate(R.layout.popup_menubar_rightview, null);
+        mSwitchRenderBtn = (Button) mRightView.findViewById(R.id.popup_menubar_render);
         
         mAnimationDuration = context.getResources().getInteger(R.integer.popup_menubar_animation_time);
         
@@ -93,8 +96,11 @@ public class PopupMenuBar implements View.OnClickListener,
 
             for (int colIndex = 0; colIndex < colCount; ++colIndex) {
                 View col = row.getChildAt(colIndex);
-                col.setOnClickListener(this);
-                col.setOnTouchListener(this);
+                
+                if(col.getVisibility() == View.VISIBLE) {
+                    col.setOnClickListener(this);
+                    col.setOnTouchListener(this);
+                }
             }
         }
     }
@@ -172,12 +178,23 @@ public class PopupMenuBar implements View.OnClickListener,
                 mObserver.onShowFileMgr();
                 break;
             }
+            
+            case R.id.popup_menubar_render: {
+                mObserver.onSwitchRender();
+                break;
+            }
         }
     }
-
+    
     public void show(View anchor) {
         if (null == mPopup) {                                
             mPopup = new PopupWindow(mView, mWidth, mHeight);
+            
+            mSwitchRenderBtn.setCompoundDrawablesWithIntrinsicBounds(0, 
+                    Config.UseChromeRender ? R.drawable.popup_menubar_chromerender 
+                            : R.drawable.popup_menubar_systemrender,
+                    0, 0);
+                        
             mPopup.showAsDropDown(anchor, 0, 0);
         }
     }

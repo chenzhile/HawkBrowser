@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.hawkbrowser.R;
+import com.hawkbrowser.common.Config;
 import com.hawkbrowser.common.Util;
 import com.hawkbrowser.render.RenderView;
 import com.hawkbrowser.render.RenderViewHolderObserver;
@@ -24,6 +25,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
 
     public interface Observer {
         void onExit();
+        void onSwitchRender();
     }
 
     private RenderViewObserverImpl mRenderViewObserver = new RenderViewObserverImpl() {
@@ -112,6 +114,12 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
             // TODO Auto-generated method stub
 
         }
+        
+        @Override
+        public void onSwitchRender() {
+            if(null != mToolbarObserver)
+                mToolbarObserver.onSwitchRender();
+        }
     };
 
     public Toolbar(Context context) {
@@ -176,6 +184,9 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
     private void onToolbarMenu() {
 
         if (null == mPopupMenuBar) {
+            if(null == mRenderViewObserver.renderView())
+                return;
+            
             View renderView = mRenderViewObserver.renderView().getView();
             mPopupMenuBar = new PopupMenuBar(getContext(), 
                     renderView.getWidth(), renderView.getHeight(), mPopupMenuBarObserver);
@@ -220,5 +231,9 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
     private void updateBackForwardStatus(RenderView view) {
         mBack.setEnabled(view.canGoBack());
         mForward.setEnabled(view.canGoForward());
+    }
+    
+    public void destroy() {
+        mToolbarObserver = null;
     }
 }

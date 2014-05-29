@@ -1,6 +1,8 @@
 
 package com.hawkbrowser.browser.ui;
 
+import com.hawkbrowser.common.Config;
+
 public interface PopupMenuBarObserver {
 
     void onAddBookmark();
@@ -28,4 +30,6 @@ public interface PopupMenuBarObserver {
     void onFullScreen();
 
     void onShowFileMgr();
+    
+    void onSwitchRender();
 }

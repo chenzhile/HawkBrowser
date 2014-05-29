@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.hawkbrowser.R;
+import com.hawkbrowser.browser.HawkBrowserApplication;
 import com.hawkbrowser.common.Config;
 import com.hawkbrowser.common.Constants;
 import com.hawkbrowser.render.RenderView;
@@ -36,17 +37,22 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         super.onCreate(savedInstanceState);
 
-        if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE)
-            startChrome(savedInstanceState);
+        if (Config.UseChromeRender)
+            initChrome(savedInstanceState);
         else {
             setContentView(R.layout.main);
-            initAfterRenderStart();
+            initAfterRenderInit();
         }
     }
 
-    private void initAfterRenderStart() {
+    private void initAfterRenderInit() {
 
-        mRenderViewModel = new RenderViewModel();
+        initUI();
+        startRender();
+    }
+
+    private void initUI() {
+
         mRenderViewHolder = (RenderViewHolder) findViewById(R.id.renderview_holder);
 
         LocationBar locationBar = (LocationBar) findViewById(R.id.locationbar);
@@ -54,11 +60,18 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mRenderViewHolder.addObserver(mToolbar);
+
         mToolbar.setToolbarObserver(this);
+
+    }
+
+    private void startRender() {
+
+        mRenderViewModel = new RenderViewModel();
 
         RenderView renderView;
 
-        if (Config.RenderViewType.Chrome == Config.RENDER_VIEW_TYPE) {
+        if (Config.UseChromeRender) {
             renderView = mRenderViewModel.createChromeRenderView(this, mWindow);
             mRenderViewHolder.addView(mContentViewRenderView,
                     new FrameLayout.LayoutParams(
@@ -75,7 +88,9 @@ public class MainActivity extends Activity implements Toolbar.Observer {
         renderView.loadUrl(Constants.HOME_PAGE_URL);
     }
 
-    private void startChrome(final Bundle savedInstanceState) {
+    private void initChrome(final Bundle savedInstanceState) {
+
+        HawkBrowserApplication.initChromeResource();
 
         BrowserStartupController.StartupCallback callback =
                 new BrowserStartupController.StartupCallback() {
@@ -118,7 +133,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
             }
         };
 
-        initAfterRenderStart();
+        initAfterRenderInit();
     }
 
     @Override
@@ -134,7 +149,17 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     protected void onDestroy() {
         super.onDestroy();
 
-        mToolbar.setToolbarObserver(null);
+        destroyUI();
+        destroyRender();
+    }
+
+    private void destroyUI() {
+
+        mToolbar.destroy();
+        mRenderViewHolder.destroy();
+    }
+
+    private void destroyRender() {
 
         if (null != mRenderViewModel) {
             mRenderViewModel.destroy();
@@ -142,6 +167,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
         }
 
         if (null != mContentViewRenderView) {
+            mRenderViewHolder.removeView(mContentViewRenderView);
             mContentViewRenderView.destroy();
             mContentViewRenderView = null;
         }
@@ -161,5 +187,20 @@ public class MainActivity extends Activity implements Toolbar.Observer {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onSwitchRender() {
+
+        destroyUI();
+        destroyRender();
+        
+        if(Config.UseChromeRender) {
+            Config.UseChromeRender = false;
+            initAfterRenderInit();
+        } else {
+            Config.UseChromeRender = true;
+            initChrome(null);
+        }
     }
 }

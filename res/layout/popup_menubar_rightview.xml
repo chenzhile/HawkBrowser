@@ -62,12 +62,35 @@
 
         <Button
             android:id="@+id/popup_menubar_file"
-            android:layout_width="@dimen/popup_menubar_btn_width"
-            android:layout_height="@dimen/popup_menubar_btn_height"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@drawable/popup_menubar_btn_bg"
-            android:drawableTop="@drawable/icon_file"
+            android:drawableTop="@drawable/popup_menubar_file"
             android:text="@string/file"
             android:textSize="@dimen/popup_menubar_textsize" />
+        
+		<Button
+            android:id="@+id/popup_menubar_render"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/popup_menubar_btn_bg"
+            android:drawableTop="@drawable/popup_menubar_systemrender"
+            android:text="@string/file"
+            android:textSize="@dimen/popup_menubar_textsize" />
+		
+		<Button
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:layout_weight="1" />
+		
+		<Button
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            android:layout_weight="1" />
     </TableRow>
     
 </TableLayout>

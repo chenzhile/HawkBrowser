@@ -31,10 +31,12 @@ public class RenderViewHolder extends FrameLayout {
             removeView(mCurrentView.getView());
         }
         
-        addView(view.getView());
-        
-        for(RenderViewHolderObserver observer : mObservers) {
-            observer.onRenderViewChanged(mCurrentView, view);
+        if(null != view) {
+            addView(view.getView());
+            
+            for(RenderViewHolderObserver observer : mObservers) {
+                observer.onRenderViewChanged(mCurrentView, view);
+            }
         }
         
         mCurrentView = view;
@@ -47,4 +49,9 @@ public class RenderViewHolder extends FrameLayout {
     public void removeObserver(RenderViewHolderObserver observer) {
         mObservers.remove(observer);
     }    
+    
+    public void destroy() {
+        mObservers.clear();
+        setCurrentRenderView(null);
+    }
 }
