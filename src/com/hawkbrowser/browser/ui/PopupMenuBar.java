@@ -1,6 +1,7 @@
 
 package com.hawkbrowser.browser.ui;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
@@ -9,9 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
 import android.widget.PopupWindow;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -28,39 +26,10 @@ public class PopupMenuBar implements View.OnClickListener,
     private View mLeftView;
     private View mRightView;
     private View mLeftSpinner;
-    private View mRightSpinner;
-    private Animation mSpinnerMoveLeft;
-    private Animation mSpinnerMoveRight;
+    private long mAnimationDuration;
     private PopupWindow mPopup;
     private PopupMenuBarObserver mObserver;
     private GestureDetector mGestureDetector;
-
-    private AnimationListener mSpinnerAnimationListener = new AnimationListener() {
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-
-            if (animation == mSpinnerMoveRight) {
-                mLeftSpinner.setX(mLeftSpinner.getWidth());
-                mRightSpinner.setX(0);
-            } else if (animation == mSpinnerMoveLeft) {
-                mLeftSpinner.setX(0);
-                mRightSpinner.setX(mLeftSpinner.getWidth());
-            }
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-            // TODO Auto-generated method stub
-
-        }
-
-        @Override
-        public void onAnimationStart(Animation animation) {
-            // TODO Auto-generated method stub
-
-        }
-    };
 
     public PopupMenuBar(Context context) {
         this(context, null);
@@ -80,6 +49,8 @@ public class PopupMenuBar implements View.OnClickListener,
         mView = (ViewGroup) li.inflate(R.layout.popup_menubar, null);
         mLeftView = li.inflate(R.layout.popup_menubar_leftview, null);
         mRightView = li.inflate(R.layout.popup_menubar_rightview, null);
+        
+        mAnimationDuration = context.getResources().getInteger(R.integer.popup_menubar_animation_time);
 
         initFlipper();
         initBtnListener((TableLayout) mLeftView);
@@ -95,22 +66,6 @@ public class PopupMenuBar implements View.OnClickListener,
         mViewFlipper.addView(mRightView);
 
         mLeftSpinner = mView.findViewById(R.id.popup_menubar_spinner_left);
-        mRightSpinner = mView.findViewById(R.id.popup_menubar_spinner_right);
-
-        //        long duration = context.getResources().getInteger(R.integer.popup_menubar_animation_time);
-
-        //        mSpinnerMoveRight = ObjectAnimator.ofFloat(mLeftSpinner, "X", 0f, mLeftSpinner.getWidth());
-        //        mSpinnerMoveRight.setDuration(duration);
-        //        mSpinnerMoveLeft = ObjectAnimator.ofFloat(mLeftSpinner, "X", mLeftSpinner.getWidth(), 0f);
-        //        mSpinnerMoveLeft.setDuration(duration);
-
-        mSpinnerMoveLeft = AnimationUtils.loadAnimation(mView.getContext(),
-                R.anim.popup_menubar_spin_move_left);
-        mSpinnerMoveLeft.setAnimationListener(mSpinnerAnimationListener);
-
-        mSpinnerMoveRight = AnimationUtils.loadAnimation(mView.getContext(),
-                R.anim.popup_menubar_spin_move_right);
-        mSpinnerMoveRight.setAnimationListener(mSpinnerAnimationListener);
 
         mGestureDetector = new GestureDetector(mView.getContext(), this);
     }
@@ -238,15 +193,18 @@ public class PopupMenuBar implements View.OnClickListener,
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-        final int distance = 80;
+        final int distance = 20;
 
         if (e2.getX() - e1.getX() > distance && mViewFlipper.getCurrentView() == mRightView) {
 
             mViewFlipper.setInAnimation(mView.getContext(), R.anim.popup_menubar_push_left_in);
             mViewFlipper.setOutAnimation(mView.getContext(), R.anim.popup_menubar_push_right_out);
             mViewFlipper.showPrevious();
-
-            mLeftSpinner.startAnimation(mSpinnerMoveLeft);
+            
+            ObjectAnimator animation = ObjectAnimator.ofFloat(mLeftSpinner, "X", 
+                    mLeftSpinner.getWidth(), 0).setDuration(mAnimationDuration);
+            
+            animation.start();
 
             return true;
 
@@ -256,7 +214,10 @@ public class PopupMenuBar implements View.OnClickListener,
             mViewFlipper.setOutAnimation(mView.getContext(), R.anim.popup_menubar_push_left_out);
             mViewFlipper.showNext();
 
-            mLeftSpinner.startAnimation(mSpinnerMoveRight);
+            ObjectAnimator animation = ObjectAnimator.ofFloat(mLeftSpinner, "X", 
+                    0, mLeftSpinner.getWidth()).setDuration(mAnimationDuration);
+            
+            animation.start();
 
             return true;
         }
