@@ -77,7 +77,7 @@
             android:layout_weight="1"
             android:background="@drawable/popup_menubar_btn_bg"
             android:drawableTop="@drawable/popup_menubar_systemrender"
-            android:text="@string/file"
+            android:text="@string/system_render"
             android:textSize="@dimen/popup_menubar_textsize" />
 		
 		<Button

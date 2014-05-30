@@ -163,4 +163,6 @@ You are signing in with a managed account and giving its administrator control o
     <string name="imageless_mode">Imageless Mode</string>
     <string name="fullscreen">Fullscreen</string>
     <string name="file">File</string>
+    <string name="system_render">System Render</string>
+    <string name="chrome_render">Chrome Render</string>
 </resources>

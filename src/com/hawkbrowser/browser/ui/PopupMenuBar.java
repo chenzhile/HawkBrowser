@@ -57,13 +57,13 @@ public class PopupMenuBar implements View.OnClickListener,
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         mView = (ViewGroup) li.inflate(R.layout.popup_menubar, null);
-        
+
         mLeftView = li.inflate(R.layout.popup_menubar_leftview, null);
         mRightView = li.inflate(R.layout.popup_menubar_rightview, null);
         mSwitchRenderBtn = (Button) mRightView.findViewById(R.id.popup_menubar_render);
-        
+
         mAnimationDuration = context.getResources().getInteger(R.integer.popup_menubar_animation_time);
-        
+
         mOverlayView = mView.findViewById(R.id.popup_menubar_overlay);
         mOverlayView.setOnClickListener(this);
         mOverlayView.setOnTouchListener(this);
@@ -96,8 +96,8 @@ public class PopupMenuBar implements View.OnClickListener,
 
             for (int colIndex = 0; colIndex < colCount; ++colIndex) {
                 View col = row.getChildAt(colIndex);
-                
-                if(col.getVisibility() == View.VISIBLE) {
+
+                if (col.getVisibility() == View.VISIBLE) {
                     col.setOnClickListener(this);
                     col.setOnTouchListener(this);
                 }
@@ -107,7 +107,7 @@ public class PopupMenuBar implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
-        
+
         dismiss();
 
         if (null == mObserver)
@@ -178,23 +178,26 @@ public class PopupMenuBar implements View.OnClickListener,
                 mObserver.onShowFileMgr();
                 break;
             }
-            
+
             case R.id.popup_menubar_render: {
                 mObserver.onSwitchRender();
                 break;
             }
         }
     }
-    
+
     public void show(View anchor) {
-        if (null == mPopup) {                                
+        if (null == mPopup) {
             mPopup = new PopupWindow(mView, mWidth, mHeight);
-            
-            mSwitchRenderBtn.setCompoundDrawablesWithIntrinsicBounds(0, 
-                    Config.UseChromeRender ? R.drawable.popup_menubar_chromerender 
+
+            mSwitchRenderBtn.setCompoundDrawablesWithIntrinsicBounds(0,
+                    Config.UseChromeRender ? R.drawable.popup_menubar_chromerender
                             : R.drawable.popup_menubar_systemrender,
                     0, 0);
-                        
+
+            mSwitchRenderBtn.setText(Config.UseChromeRender
+                    ? R.string.chrome_render : R.string.system_render);
+
             mPopup.showAsDropDown(anchor, 0, 0);
         }
     }
@@ -227,10 +230,10 @@ public class PopupMenuBar implements View.OnClickListener,
             mViewFlipper.setInAnimation(mView.getContext(), R.anim.popup_menubar_push_left_in);
             mViewFlipper.setOutAnimation(mView.getContext(), R.anim.popup_menubar_push_right_out);
             mViewFlipper.showPrevious();
-            
-            ObjectAnimator animation = ObjectAnimator.ofFloat(mLeftSpinner, "X", 
+
+            ObjectAnimator animation = ObjectAnimator.ofFloat(mLeftSpinner, "X",
                     mLeftSpinner.getWidth(), 0).setDuration(mAnimationDuration);
-            
+
             animation.start();
 
             return true;
@@ -241,9 +244,9 @@ public class PopupMenuBar implements View.OnClickListener,
             mViewFlipper.setOutAnimation(mView.getContext(), R.anim.popup_menubar_push_left_out);
             mViewFlipper.showNext();
 
-            ObjectAnimator animation = ObjectAnimator.ofFloat(mLeftSpinner, "X", 
+            ObjectAnimator animation = ObjectAnimator.ofFloat(mLeftSpinner, "X",
                     0, mLeftSpinner.getWidth()).setDuration(mAnimationDuration);
-            
+
             animation.start();
 
             return true;
@@ -278,21 +281,21 @@ public class PopupMenuBar implements View.OnClickListener,
     //------------------ View.OnTouchListener -------------------
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        
-        if(v == mOverlayView) {
-            
-            if(event.getAction() == MotionEvent.ACTION_UP)
+
+        if (v == mOverlayView) {
+
+            if (event.getAction() == MotionEvent.ACTION_UP)
                 dismiss();
-            
+
             return true;
         }
-        
+
         boolean handled = mGestureDetector.onTouchEvent(event);
-        
-        if(v != mLeftView && v != mRightView && handled) {
+
+        if (v != mLeftView && v != mRightView && handled) {
             v.setPressed(false);
         }
-        
+
         return handled;
     }
 }
