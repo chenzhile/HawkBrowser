@@ -28,6 +28,11 @@ public class SystemRenderView extends RenderView {
 
     @Override
     public void loadUrl(String url) {
+        
+        if (!url.startsWith("http://") && !url.startsWith("about:")) {
+            url = "http://" + url;
+        }
+        
         mWebView.loadUrl(url);
         requestFocus();
     }
