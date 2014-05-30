@@ -9,7 +9,7 @@
     <integer name="fre_long_duration_ms">750</integer>
     
     <!-- new add -->
-    <integer name="locationbar_progressbar_max">80</integer>
+    <integer name="locationbar_progressbar_max">100</integer>
     <integer name="popup_menubar_animation_time">700</integer>
     
 </resources>

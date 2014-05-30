@@ -118,9 +118,9 @@
          android:id="@+id/locationbar_progressbar"
          style="?android:attr/progressBarStyleHorizontal"
          android:layout_width="match_parent"
-         android:background="@color/location_bar_bg"
          android:layout_height="@dimen/locationbar_progressbar_height"
          android:max="@integer/locationbar_progressbar_max"
+         android:progressDrawable="@drawable/locationbar_progressbar_layer"
          android:progress="0"
          android:visibility="visible"
          />
