@@ -1,7 +1,6 @@
 
 package com.hawkbrowser.browser.ui;
 
-import com.hawkbrowser.common.Config;
 
 public interface PopupMenuBarObserver {
 

@@ -1,5 +1,5 @@
 
-package com.hawkbrowser.render;
+package com.hawkbrowser.render.system;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,11 +7,13 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
+
+import com.hawkbrowser.render.RenderView;
 
 public class SystemRenderView extends RenderView {
 
     private WebView mWebView;
+    private SystemRenderObserverAdapter mSystemRenderObserver;
 
     @SuppressLint("SetJavaScriptEnabled")
     public SystemRenderView(Context context, AttributeSet attrs) {
@@ -21,13 +23,7 @@ public class SystemRenderView extends RenderView {
         WebSettings setting = mWebView.getSettings();
         setting.setJavaScriptEnabled(true);
 
-        mWebView.setWebViewClient(new WebViewClient() {
-            
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false;
-            }
-        });
+        mSystemRenderObserver = new SystemRenderObserverAdapter(this, mWebView, mObservers);
     }
 
     @Override
@@ -80,6 +76,9 @@ public class SystemRenderView extends RenderView {
     public void destroy() {
         super.destroy();
 
+        mSystemRenderObserver.destroy();
+        mSystemRenderObserver = null;
+        
         mWebView.destroy();
         mWebView = null;
     }

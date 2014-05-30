@@ -62,6 +62,7 @@ public class LocationBar extends LinearLayout
             mCancelRefresh.setImageResource(R.drawable.locationbar_cancel);
             mProgressBar.setVisibility(View.VISIBLE);
             mDuringNavigation = true;
+            mInput.setText(url);
         }
 
         @Override

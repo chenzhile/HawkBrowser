@@ -28,11 +28,11 @@ public abstract class RenderView {
     
     public abstract void reload();
     
-    public void addObserver(RenderViewObserver observer) {
+    void addObserver(RenderViewObserver observer) {
         mObservers.add(observer);
     }
     
-    public void removeObserver(RenderViewObserver observer) {
+    void removeObserver(RenderViewObserver observer) {
         mObservers.remove(observer);
     }
     

@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.hawkbrowser.R;
-import com.hawkbrowser.common.Config;
 import com.hawkbrowser.common.Util;
 import com.hawkbrowser.render.RenderView;
 import com.hawkbrowser.render.RenderViewHolderObserver;

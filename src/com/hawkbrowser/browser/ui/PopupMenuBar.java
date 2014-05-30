@@ -3,11 +3,7 @@ package com.hawkbrowser.browser.ui;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +16,6 @@ import android.widget.ViewFlipper;
 
 import com.hawkbrowser.R;
 import com.hawkbrowser.common.Config;
-import com.hawkbrowser.common.Util;
 
 public class PopupMenuBar implements View.OnClickListener,
         GestureDetector.OnGestureListener, View.OnTouchListener {
