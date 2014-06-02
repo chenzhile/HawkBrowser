@@ -2,6 +2,7 @@
 package com.hawkbrowser.browser.ui;
 
 import android.app.Activity;
+import android.content.res.Resources.Theme;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.hawkbrowser.R;
 import com.hawkbrowser.browser.HawkBrowserApplication;
 import com.hawkbrowser.common.Config;
 import com.hawkbrowser.common.Constants;
+import com.hawkbrowser.common.Setting;
 import com.hawkbrowser.render.RenderView;
 import com.hawkbrowser.render.RenderViewHolder;
 import com.hawkbrowser.render.RenderViewModel;
@@ -36,8 +38,10 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        
+        setTheme(Setting.InNightMode ? R.style.MainTheme_night : R.style.MainTheme_light);
 
-        if (Config.UseChromeRender)
+        if (Setting.UseChromeRender)
             initChrome(savedInstanceState);
         else {
             setContentView(R.layout.main);
@@ -71,7 +75,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         RenderView renderView;
 
-        if (Config.UseChromeRender) {
+        if (Setting.UseChromeRender) {
             renderView = mRenderViewModel.createChromeRenderView(this, mWindow);
             mRenderViewHolder.addView(mContentViewRenderView,
                     new FrameLayout.LayoutParams(
@@ -195,12 +199,19 @@ public class MainActivity extends Activity implements Toolbar.Observer {
         destroyUI();
         destroyRender();
         
-        if(Config.UseChromeRender) {
-            Config.UseChromeRender = false;
+        if(Setting.UseChromeRender) {
+            Setting.UseChromeRender = false;
             initAfterRenderInit();
         } else {
-            Config.UseChromeRender = true;
+            Setting.UseChromeRender = true;
             initChrome(null);
         }
+    }
+
+    @Override
+    public void onNightMode() {
+        
+        Setting.InNightMode = !Setting.InNightMode;
+        recreate();
     }
 }

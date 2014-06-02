@@ -15,7 +15,7 @@ import android.widget.TableRow;
 import android.widget.ViewFlipper;
 
 import com.hawkbrowser.R;
-import com.hawkbrowser.common.Config;
+import com.hawkbrowser.common.Setting;
 
 public class PopupMenuBar implements View.OnClickListener,
         GestureDetector.OnGestureListener, View.OnTouchListener {
@@ -186,11 +186,11 @@ public class PopupMenuBar implements View.OnClickListener,
             mPopup = new PopupWindow(mView, mWidth, mHeight);
 
             mSwitchRenderBtn.setCompoundDrawablesWithIntrinsicBounds(0,
-                    Config.UseChromeRender ? R.drawable.popup_menubar_chromerender
+                    Setting.UseChromeRender ? R.drawable.popup_menubar_chromerender
                             : R.drawable.popup_menubar_systemrender,
                     0, 0);
 
-            mSwitchRenderBtn.setText(Config.UseChromeRender
+            mSwitchRenderBtn.setText(Setting.UseChromeRender
                     ? R.string.chrome_render : R.string.system_render);
 
             mPopup.showAsDropDown(anchor, 0, 0);

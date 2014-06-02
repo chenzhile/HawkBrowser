@@ -25,8 +25,8 @@
     <!-- new add -->
     <dimen name="location_bar_height">50.0dip</dimen>
     <dimen name="location_bar_margin_horizontal">10.0dip</dimen>
-    <dimen name="location_bar_margin_top">5.0dip</dimen>
-    <dimen name="location_bar_margin_bottom">0.0dip</dimen>
+    <dimen name="location_bar_margin_top">7.0dip</dimen>
+    <dimen name="location_bar_margin_bottom">7.0dip</dimen>
     <dimen name="address_input_margin">5.0dip</dimen>
     <dimen name="address_input_padding_left">35.0dip</dimen>
     <dimen name="address_input_padding_right">35.0dip</dimen>

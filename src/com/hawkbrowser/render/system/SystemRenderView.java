@@ -22,6 +22,7 @@ public class SystemRenderView extends RenderView {
 
         WebSettings setting = mWebView.getSettings();
         setting.setJavaScriptEnabled(true);
+        setting.setBuiltInZoomControls(true);
 
         mSystemRenderObserver = new SystemRenderObserverAdapter(this, mWebView, mObservers);
     }

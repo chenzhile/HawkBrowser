@@ -25,6 +25,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
     public interface Observer {
         void onExit();
         void onSwitchRender();
+        void onNightMode();
     }
 
     private RenderViewObserverImpl mRenderViewObserver = new RenderViewObserverImpl() {
@@ -92,8 +93,8 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
 
         @Override
         public void onNightMode() {
-            // TODO Auto-generated method stub
-
+            if(null != mToolbarObserver)
+                mToolbarObserver.onNightMode();
         }
 
         @Override
@@ -129,7 +130,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
         super(context, attrs);
         init();
     }
-
+    
     private void init() {
 
         inflate(getContext(), R.layout.toolbar, this);
