@@ -2,10 +2,14 @@
 package com.hawkbrowser.browser.ui;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -33,6 +37,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     private RenderViewModel mRenderViewModel;
     private Toolbar mToolbar;
     private LocationBar mLocationBar;
+    private View mNightModeLayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         initUI();
         startRender();
+        processDayNightMode(Setting.InNightMode);
     }
 
     private void initUI() {
@@ -64,6 +70,11 @@ public class MainActivity extends Activity implements Toolbar.Observer {
         mRenderViewHolder.addObserver(mToolbar);
 
         mToolbar.setToolbarObserver(this);
+        
+
+        mNightModeLayer = new View(this);
+        int nightModeColor = getResources().getColor(R.color.night_mode_layer_bg);
+        mNightModeLayer.setBackgroundColor(nightModeColor);
     }
 
     private void startRender() {
@@ -149,8 +160,6 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        Setting.InNightMode = false;
         
         destroyUI();
         destroyRender();
@@ -158,6 +167,11 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
     private void destroyUI() {
 
+        if(mNightModeLayer.getParent() != null) {
+            getWindowManager().removeView(mNightModeLayer);
+            mNightModeLayer = null;
+        }
+            
         mToolbar.destroy();
         mRenderViewHolder.destroy();
     }
@@ -212,21 +226,29 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         Setting.InNightMode = !Setting.InNightMode;
         
-        if(Setting.InNightMode) {
-            mLocationBar.enterNightMode();
+        processDayNightMode(Setting.InNightMode);
+    }
+    
+    private void processDayNightMode(boolean inNightMode) {
+        
+        boolean isLayerAdded = mNightModeLayer.getParent() != null;
+    
+        if(inNightMode) {            
             
-            int renderViewBg = getResources().getColor(R.color.night_mode_bg_default);
-            mRenderViewModel.setBackgroundColor(renderViewBg);
-            
-            mToolbar.enterNightMode();
+            if(!isLayerAdded) {
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.TYPE_APPLICATION,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | 
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        PixelFormat.RGBA_8888);
+                getWindowManager().addView(mNightModeLayer, lp);
+            }
         }
         else {
-            mLocationBar.enterDayMode();
-            
-            int renderViewBg = getResources().getColor(R.color.day_mode_bg_default);
-            mRenderViewModel.setBackgroundColor(renderViewBg);
-            
-            mToolbar.enterDayMode();
+            if(isLayerAdded)
+                getWindowManager().removeView(mNightModeLayer);
         }
     }
 }
