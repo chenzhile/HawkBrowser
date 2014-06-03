@@ -28,6 +28,8 @@ public abstract class RenderView {
     
     public abstract void reload();
     
+    public abstract void setBackgroundColor(int color);
+    
     void addObserver(RenderViewObserver observer) {
         mObservers.add(observer);
     }

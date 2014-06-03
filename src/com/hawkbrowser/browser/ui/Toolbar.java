@@ -25,7 +25,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
     public interface Observer {
         void onExit();
         void onSwitchRender();
-        void onNightMode();
+        void onDayNightMode();
     }
 
     private RenderViewObserverImpl mRenderViewObserver = new RenderViewObserverImpl() {
@@ -94,7 +94,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
         @Override
         public void onNightMode() {
             if(null != mToolbarObserver)
-                mToolbarObserver.onNightMode();
+                mToolbarObserver.onDayNightMode();
         }
 
         @Override
@@ -129,6 +129,22 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
     public Toolbar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+    }
+    
+    public void enterNightMode() {
+        
+        int bgColor = getContext().getResources().getColor(R.color.night_mode_bg_default);
+        setBackgroundColor(bgColor);
+        
+        mPopupMenuBar.enterNightMode();
+    }
+    
+    public void enterDayMode() {
+        
+        int bgColor = getContext().getResources().getColor(R.color.day_mode_bg_default);
+        setBackgroundColor(bgColor);
+        
+        mPopupMenuBar.enterDayMode();
     }
     
     private void init() {
@@ -187,9 +203,13 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
             if(null == mRenderViewObserver.renderView())
                 return;
             
+            int progressBarHeight = getContext().getResources().getDimensionPixelSize(
+                    R.dimen.locationbar_progressbar_height);
+            
             View renderView = mRenderViewObserver.renderView().getView();
-            mPopupMenuBar = new PopupMenuBar(getContext(), 
-                    renderView.getWidth(), renderView.getHeight(), mPopupMenuBarObserver);
+            mPopupMenuBar = new PopupMenuBar(getContext(), renderView.getWidth(), 
+                    renderView.getHeight() + progressBarHeight,
+                    mPopupMenuBarObserver);
         }
 
         if (mPopupMenuBar.isShow())

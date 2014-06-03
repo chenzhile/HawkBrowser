@@ -13,9 +13,10 @@
         android:layout_weight="1" />
         
     <LinearLayout
+        android:id="@+id/popupmenubar_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/popup_menubar_height"
-        android:background="?attr/popupmenubar_background"
+        android:background="@color/day_mode_bg_default"
         android:orientation="vertical" >
         
 	    <LinearLayout

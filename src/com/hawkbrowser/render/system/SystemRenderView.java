@@ -3,6 +3,7 @@ package com.hawkbrowser.render.system;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -76,6 +77,11 @@ public class SystemRenderView extends RenderView {
     @Override
     public void reload() {
         mWebView.reload();
+    }
+    
+    @Override
+    public void setBackgroundColor(int color) {
+        mWebView.setBackgroundColor(color);
     }
 
     @Override

@@ -45,6 +45,18 @@ public class PopupMenuBar implements View.OnClickListener,
 
         init(context);
     }
+    
+    public void enterNightMode() {
+        
+        int bgColor = mView.getContext().getResources().getColor(R.color.night_mode_bg_default);
+        mView.findViewById(R.id.popupmenubar_bottom).setBackgroundColor(bgColor);
+    }
+    
+    public void enterDayMode() {
+        
+        int bgColor = mView.getContext().getResources().getColor(R.color.day_mode_bg_default);
+        mView.findViewById(R.id.popupmenubar_bottom).setBackgroundColor(bgColor);
+    }
 
     private void init(Context context) {
 

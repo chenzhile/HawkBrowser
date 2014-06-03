@@ -39,7 +39,7 @@
             android:name=".browser.ui.MainActivity"
             android:hardwareAccelerated="true" 
             android:launchMode="singleTask" 
-            android:theme="@style/MainTheme.light" 
+            android:theme="@style/MainTheme.day" 
             android:windowSoftInputMode="adjustPan"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenSize" >
             

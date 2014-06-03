@@ -2,7 +2,6 @@
 package com.hawkbrowser.browser.ui;
 
 import android.app.Activity;
-import android.content.res.Resources.Theme;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -33,14 +32,13 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     private ContentViewRenderView mContentViewRenderView;
     private RenderViewModel mRenderViewModel;
     private Toolbar mToolbar;
+    private LocationBar mLocationBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         
-        setTheme(Setting.InNightMode ? R.style.MainTheme_night : R.style.MainTheme_light);
-
         if (Setting.UseChromeRender)
             initChrome(savedInstanceState);
         else {
@@ -59,14 +57,13 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         mRenderViewHolder = (RenderViewHolder) findViewById(R.id.renderview_holder);
 
-        LocationBar locationBar = (LocationBar) findViewById(R.id.locationbar);
-        mRenderViewHolder.addObserver(locationBar);
+        mLocationBar = (LocationBar) findViewById(R.id.locationbar);
+        mRenderViewHolder.addObserver(mLocationBar);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mRenderViewHolder.addObserver(mToolbar);
 
         mToolbar.setToolbarObserver(this);
-
     }
 
     private void startRender() {
@@ -153,6 +150,8 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     protected void onDestroy() {
         super.onDestroy();
 
+        Setting.InNightMode = false;
+        
         destroyUI();
         destroyRender();
     }
@@ -209,9 +208,25 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     }
 
     @Override
-    public void onNightMode() {
-        
+    public void onDayNightMode() {
+
         Setting.InNightMode = !Setting.InNightMode;
-        recreate();
+        
+        if(Setting.InNightMode) {
+            mLocationBar.enterNightMode();
+            
+            int renderViewBg = getResources().getColor(R.color.night_mode_bg_default);
+            mRenderViewModel.setBackgroundColor(renderViewBg);
+            
+            mToolbar.enterNightMode();
+        }
+        else {
+            mLocationBar.enterDayMode();
+            
+            int renderViewBg = getResources().getColor(R.color.day_mode_bg_default);
+            mRenderViewModel.setBackgroundColor(renderViewBg);
+            
+            mToolbar.enterDayMode();
+        }
     }
 }

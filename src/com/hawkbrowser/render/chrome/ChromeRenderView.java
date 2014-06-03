@@ -69,6 +69,11 @@ public class ChromeRenderView extends RenderView {
     public void reload() {
         mImpl.reload();
     }
+    
+    @Override
+    public void setBackgroundColor(int color) {
+        
+    }
 
     @Override
     public void destroy() {

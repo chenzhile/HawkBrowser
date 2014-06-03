@@ -52,16 +52,10 @@
     <color name="webapp_url_bar_scheme">#ff339922</color>
     
     <!-- new add -->
-    <color name="location_bar_bg">#fff1f1f1</color>
-    <color name="location_bar_night">#ff000000</color>
-    <color name="locationbar_input_bg">#ffffffff</color>
-    <color name="locationbar_input_bg_night">#ff000000</color>
-    <color name="toolbar_bg">#ffffffff</color>
-    <color name="toolbar_bg_night">#ff000000</color>
-    <color name="webview_bg">#ffffffff</color>
-    <color name="webview_bg_night">#ff000000</color>
-    <color name="popupmenubar_bg">#ffffffff</color>
-    <color name="popupmenubar_bg_night">#ff000000</color>
+    <color name="location_bar_bg">#ffe5e5e5</color>
+    <color name="day_mode_bg_default">#ffffffff</color>
+    <color name="night_mode_bg_default">#ff808080</color>
+    
     
     <color name="semi_transparent">#88676767</color>
     <color name="locationbar_progress">#ff33CCFF</color>

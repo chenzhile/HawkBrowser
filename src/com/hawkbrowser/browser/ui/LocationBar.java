@@ -92,6 +92,24 @@ public class LocationBar extends LinearLayout
     public LocationBar(Context context) {
         this(context, null);
     }
+    
+    public void enterNightMode() {
+        
+        int bgColor = getContext().getResources().getColor(R.color.night_mode_bg_default);
+        
+        findViewById(R.id.locationbar_top).setBackgroundColor(bgColor);
+        mInput.setBackgroundColor(bgColor);
+        
+    }
+    
+    public void enterDayMode() {
+        
+        int locationBarBg = getContext().getResources().getColor(R.color.location_bar_bg);
+        findViewById(R.id.locationbar_top).setBackgroundColor(locationBarBg);
+     
+        int inputBgColor = getContext().getResources().getColor(R.color.day_mode_bg_default);
+        mInput.setBackgroundColor(inputBgColor);
+    }
 
     private void init() {
 

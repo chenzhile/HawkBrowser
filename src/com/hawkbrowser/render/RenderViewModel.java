@@ -2,6 +2,7 @@ package com.hawkbrowser.render;
 
 import android.content.Context;
 
+import com.hawkbrowser.R;
 import com.hawkbrowser.render.chrome.ChromeRenderView;
 import com.hawkbrowser.render.system.SystemRenderView;
 
@@ -41,5 +42,12 @@ public class RenderViewModel {
         }
         
         mRenderViews.clear();
+    }
+    
+    public void setBackgroundColor(int color) {
+        
+        for (RenderView view : mRenderViews) {
+            view.setBackgroundColor(color);
+        }
     }
 }

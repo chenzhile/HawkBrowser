@@ -5,9 +5,10 @@
     android:orientation="vertical" >
     
 	<LinearLayout
+	    android:id="@+id/locationbar_top"
 	    android:layout_width="match_parent"
 	    android:layout_height="@dimen/location_bar_height"
-		android:background="?attr/locationbar_background"
+		android:background="@color/location_bar_bg"
 	    android:orientation="horizontal" >
 	
 	    <RelativeLayout
@@ -18,14 +19,14 @@
 	        android:layout_marginTop="@dimen/location_bar_margin_top"
 	        android:layout_marginBottom="@dimen/location_bar_margin_bottom"
 	        android:layout_weight="1"
-	        android:background="?attr/locationbar_background"
+	        android:background="@color/location_bar_bg"
 	        android:orientation="horizontal" >
 	
 	        <EditText
 	            android:id="@+id/locationbar_input"
 	            android:layout_width="match_parent"
 	            android:layout_height="match_parent"
-	            android:background="?attr/locationbar_input_background"
+	            android:background="@color/day_mode_bg_default"
 	            android:layout_centerVertical="true"
 	            android:hint="@string/address_input_hint"
 				android:singleLine="true"
