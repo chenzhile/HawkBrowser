@@ -2,11 +2,16 @@
 package com.hawkbrowser.render;
 
 import android.view.View;
+import android.webkit.ValueCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RenderView {
+    
+    public interface ValueCallback {
+        void onReceiveValue(String value);
+    }
     
     protected List<RenderViewObserver> mObservers = new ArrayList<RenderViewObserver>();
 
@@ -28,13 +33,14 @@ public abstract class RenderView {
     
     public abstract void reload();
     
-    public abstract void setBackgroundColor(int color);
+    public abstract void evaluateJavascript(String script, 
+            ValueCallback resultCallback);
     
-    void addObserver(RenderViewObserver observer) {
+    public void addObserver(RenderViewObserver observer) {
         mObservers.add(observer);
     }
     
-    void removeObserver(RenderViewObserver observer) {
+    public void removeObserver(RenderViewObserver observer) {
         mObservers.remove(observer);
     }
     

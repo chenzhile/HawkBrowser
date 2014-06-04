@@ -3,6 +3,7 @@ package com.hawkbrowser.browser.ui;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,7 +16,7 @@ import android.widget.TableRow;
 import android.widget.ViewFlipper;
 
 import com.hawkbrowser.R;
-import com.hawkbrowser.common.Setting;
+import com.hawkbrowser.browser.BrowserSetting;
 
 public class PopupMenuBar implements View.OnClickListener,
         GestureDetector.OnGestureListener, View.OnTouchListener {
@@ -23,10 +24,9 @@ public class PopupMenuBar implements View.OnClickListener,
     private ViewGroup mView;
     private ViewFlipper mViewFlipper;
     private View mOverlayView;
-    private View mLeftView;
-    private View mRightView;
+    private ViewGroup mLeftView;
+    private ViewGroup mRightView;
     private View mLeftSpinner;
-    private Button mSwitchRenderBtn;
     private long mAnimationDuration;
     private PopupWindow mPopup;
     private PopupMenuBarObserver mObserver;
@@ -45,17 +45,52 @@ public class PopupMenuBar implements View.OnClickListener,
 
         init(context);
     }
-    
+
     public void enterNightMode() {
-        
+
         int bgColor = mView.getContext().getResources().getColor(R.color.night_mode_bg_default);
         mView.findViewById(R.id.popupmenubar_bottom).setBackgroundColor(bgColor);
+
+        Button nightModeBtn = ((Button) mRightView.findViewById(R.id.popup_menubar_nightmode));
+
+        nightModeBtn.setCompoundDrawablesWithIntrinsicBounds(0,
+                R.drawable.popup_menubar_nightmode_d, 0, 0);
+
+        nightModeBtn.setText(R.string.day_mode);
+
+        int textColor = mView.getContext().getResources().getColor(R.color.night_mode_text_color);
+        changeAllButtonTextColor(mLeftView, textColor);
+        changeAllButtonTextColor(mRightView, textColor);
     }
-    
+
     public void enterDayMode() {
-        
+
         int bgColor = mView.getContext().getResources().getColor(R.color.day_mode_bg_default);
         mView.findViewById(R.id.popupmenubar_bottom).setBackgroundColor(bgColor);
+
+        Button nightModeBtn = ((Button) mRightView.findViewById(R.id.popup_menubar_nightmode));
+        nightModeBtn.setCompoundDrawablesWithIntrinsicBounds(0,
+                R.drawable.popup_menubar_nightmode_n, 0, 0);
+
+        nightModeBtn.setText(R.string.night_mode);
+
+        int textColor = mView.getContext().getResources().getColor(R.color.night_mode_text_color);
+        changeAllButtonTextColor(mLeftView, Color.BLACK);
+        changeAllButtonTextColor(mRightView, Color.BLACK);
+    }
+
+    private void changeAllButtonTextColor(ViewGroup root, int color) {
+
+        int count = root.getChildCount();
+
+        for (int i = 0; i < count; ++i) {
+            View view = root.getChildAt(i);
+
+            if (view instanceof ViewGroup)
+                changeAllButtonTextColor((ViewGroup) view, color);
+            else if (view instanceof Button)
+                ((Button) view).setTextColor(color);
+        }
     }
 
     private void init(Context context) {
@@ -65,9 +100,8 @@ public class PopupMenuBar implements View.OnClickListener,
 
         mView = (ViewGroup) li.inflate(R.layout.popup_menubar, null);
 
-        mLeftView = li.inflate(R.layout.popup_menubar_leftview, null);
-        mRightView = li.inflate(R.layout.popup_menubar_rightview, null);
-        mSwitchRenderBtn = (Button) mRightView.findViewById(R.id.popup_menubar_render);
+        mLeftView = (ViewGroup) li.inflate(R.layout.popup_menubar_leftview, null);
+        mRightView = (ViewGroup) li.inflate(R.layout.popup_menubar_rightview, null);
 
         mAnimationDuration = context.getResources().getInteger(R.integer.popup_menubar_animation_time);
 
@@ -197,12 +231,14 @@ public class PopupMenuBar implements View.OnClickListener,
         if (null == mPopup) {
             mPopup = new PopupWindow(mView, mWidth, mHeight);
 
-            mSwitchRenderBtn.setCompoundDrawablesWithIntrinsicBounds(0,
-                    Setting.UseChromeRender ? R.drawable.popup_menubar_chromerender
+            Button switchRenderBtn = (Button) mRightView.findViewById(R.id.popup_menubar_render);
+
+            switchRenderBtn.setCompoundDrawablesWithIntrinsicBounds(0,
+                    BrowserSetting.UseChromeRender ? R.drawable.popup_menubar_chromerender
                             : R.drawable.popup_menubar_systemrender,
                     0, 0);
 
-            mSwitchRenderBtn.setText(Setting.UseChromeRender
+            switchRenderBtn.setText(BrowserSetting.UseChromeRender
                     ? R.string.chrome_render : R.string.system_render);
 
             mPopup.showAsDropDown(anchor, 0, 0);

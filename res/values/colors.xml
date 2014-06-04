@@ -54,8 +54,9 @@
     <!-- new add -->
     <color name="location_bar_bg">#ffe5e5e5</color>
     <color name="day_mode_bg_default">#ffffffff</color>
-    <color name="night_mode_bg_default">#ff808080</color>
+    <color name="night_mode_bg_default">#ff202020</color>
     <color name="semi_transparent">#88676767</color>
     <color name="locationbar_progress">#ff33CCFF</color>
     <color name="night_mode_layer_bg">#A0000000</color>
+    <color name="night_mode_text_color">#FFDDDDDD</color>
 </resources>

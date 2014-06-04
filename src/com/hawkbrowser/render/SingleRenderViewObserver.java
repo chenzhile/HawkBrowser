@@ -1,6 +1,6 @@
 package com.hawkbrowser.render;
 
-public class RenderViewObserverImpl implements RenderViewObserver {
+public class SingleRenderViewObserver extends EmptyRenderViewObserver {
 
     private RenderView mCurrentRenderView;
     
@@ -17,14 +17,5 @@ public class RenderViewObserverImpl implements RenderViewObserver {
         
         newView.addObserver(this);
         mCurrentRenderView = newView;
-    }
-       
-    public void onUpdateUrl(RenderView view, String url) { } 
-    
-    public void onLoadProgressChanged(RenderView view, int progress) { }
-    
-    public void didStartLoading(RenderView view, String url) { }
-
-    public void didStopLoading(RenderView view, String url) { }
-    
+    }    
 }

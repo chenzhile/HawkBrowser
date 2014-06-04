@@ -3,13 +3,14 @@ package com.hawkbrowser.render.system;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.hawkbrowser.render.RenderView;
+import com.hawkbrowser.render.ValueCallbackAdapter;
 
 public class SystemRenderView extends RenderView {
 
@@ -79,9 +80,17 @@ public class SystemRenderView extends RenderView {
         mWebView.reload();
     }
     
+    @SuppressLint("NewApi")
     @Override
-    public void setBackgroundColor(int color) {
-        mWebView.setBackgroundColor(color);
+    public void evaluateJavascript(String script, ValueCallback resultCallback) {
+                
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // In KitKat+ you should use the evaluateJavascript method
+            ValueCallbackAdapter adapter = new ValueCallbackAdapter(resultCallback);
+            mWebView.evaluateJavascript(script, adapter);
+        } else {
+            mWebView.loadUrl("javascript:"+ script);
+        }
     }
 
     @Override

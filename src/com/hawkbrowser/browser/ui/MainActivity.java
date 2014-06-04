@@ -2,6 +2,7 @@
 package com.hawkbrowser.browser.ui;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
@@ -10,17 +11,20 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.hawkbrowser.R;
 import com.hawkbrowser.browser.HawkBrowserApplication;
+import com.hawkbrowser.browser.BrowserSetting;
 import com.hawkbrowser.common.Config;
 import com.hawkbrowser.common.Constants;
-import com.hawkbrowser.common.Setting;
 import com.hawkbrowser.render.RenderView;
 import com.hawkbrowser.render.RenderViewHolder;
 import com.hawkbrowser.render.RenderViewModel;
+import com.hawkbrowser.render.RenderViewObserver;
+import com.hawkbrowser.render.EmptyRenderViewObserver;
 
 import org.chromium.content.browser.BrowserStartupController;
 import org.chromium.content.browser.ContentView;
@@ -39,12 +43,27 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     private LocationBar mLocationBar;
     private View mNightModeLayer;
 
+    private RenderViewObserver mRenderViewObserver = new EmptyRenderViewObserver() {
+
+        @Override
+        public void didStartLoading(RenderView view, String url) {
+            if (BrowserSetting.InNightMode)
+                view.evaluateJavascript(Constants.NIGHT_MODE_JS, null);
+        }
+
+        @Override
+        public void didStopLoading(RenderView view, String url) {
+            if (BrowserSetting.InNightMode)
+                view.evaluateJavascript(Constants.NIGHT_MODE_JS, null);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        
-        if (Setting.UseChromeRender)
+
+        if (BrowserSetting.UseChromeRender)
             initChrome(savedInstanceState);
         else {
             setContentView(R.layout.main);
@@ -56,7 +75,9 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         initUI();
         startRender();
-        processDayNightMode(Setting.InNightMode);
+        
+        if (BrowserSetting.InNightMode)
+            processNightModeViews(BrowserSetting.InNightMode);
     }
 
     private void initUI() {
@@ -70,7 +91,6 @@ public class MainActivity extends Activity implements Toolbar.Observer {
         mRenderViewHolder.addObserver(mToolbar);
 
         mToolbar.setToolbarObserver(this);
-        
 
         mNightModeLayer = new View(this);
         int nightModeColor = getResources().getColor(R.color.night_mode_layer_bg);
@@ -83,7 +103,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         RenderView renderView;
 
-        if (Setting.UseChromeRender) {
+        if (BrowserSetting.UseChromeRender) {
             renderView = mRenderViewModel.createChromeRenderView(this, mWindow);
             mRenderViewHolder.addView(mContentViewRenderView,
                     new FrameLayout.LayoutParams(
@@ -95,6 +115,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
             renderView = mRenderViewModel.createSystemRenderView(this);
         }
 
+        renderView.addObserver(mRenderViewObserver);
         mRenderViewHolder.setCurrentRenderView(renderView);
 
         renderView.loadUrl(Constants.HOME_PAGE_URL);
@@ -160,18 +181,18 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        
+
         destroyUI();
         destroyRender();
     }
 
     private void destroyUI() {
 
-        if(mNightModeLayer.getParent() != null) {
+        if (mNightModeLayer.getParent() != null) {
             getWindowManager().removeView(mNightModeLayer);
             mNightModeLayer = null;
         }
-            
+
         mToolbar.destroy();
         mRenderViewHolder.destroy();
     }
@@ -211,12 +232,12 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         destroyUI();
         destroyRender();
-        
-        if(Setting.UseChromeRender) {
-            Setting.UseChromeRender = false;
+
+        if (BrowserSetting.UseChromeRender) {
+            BrowserSetting.UseChromeRender = false;
             initAfterRenderInit();
         } else {
-            Setting.UseChromeRender = true;
+            BrowserSetting.UseChromeRender = true;
             initChrome(null);
         }
     }
@@ -224,30 +245,47 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     @Override
     public void onDayNightMode() {
 
-        Setting.InNightMode = !Setting.InNightMode;
-        
-        processDayNightMode(Setting.InNightMode);
+        BrowserSetting.InNightMode = !BrowserSetting.InNightMode;
+
+        processNightModeViews(BrowserSetting.InNightMode);
     }
-    
-    private void processDayNightMode(boolean inNightMode) {
-        
+
+    private void processNightModeViews(boolean inNightMode) {
+
+        if (inNightMode) {
+
+            mLocationBar.enterNightMode();
+            mRenderViewModel.enterNightMode();
+            mToolbar.enterNightMode();
+        }
+        else {
+
+            mLocationBar.enterDayMode();
+            mRenderViewModel.enterDayMode();
+            mToolbar.enterDayMode();
+        }
+    }
+
+    private void processNightModeLayer(boolean inNightMode) {
+
         boolean isLayerAdded = mNightModeLayer.getParent() != null;
-    
-        if(inNightMode) {            
-            
-            if(!isLayerAdded) {
+
+        if (inNightMode) {
+
+            if (!isLayerAdded) {
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
                         WindowManager.LayoutParams.MATCH_PARENT,
                         WindowManager.LayoutParams.MATCH_PARENT,
                         WindowManager.LayoutParams.TYPE_APPLICATION,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | 
-                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                         PixelFormat.RGBA_8888);
                 getWindowManager().addView(mNightModeLayer, lp);
             }
         }
         else {
-            if(isLayerAdded)
+
+            if (isLayerAdded)
                 getWindowManager().removeView(mNightModeLayer);
         }
     }

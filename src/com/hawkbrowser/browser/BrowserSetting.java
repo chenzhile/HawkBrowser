@@ -1,6 +1,6 @@
-package com.hawkbrowser.common;
+package com.hawkbrowser.browser;
 
-public final class Setting {
+public final class BrowserSetting {
 
     public static boolean UseChromeRender = false;
     public static boolean InNightMode = false;

@@ -6,6 +6,8 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.hawkbrowser.browser.BrowserSetting;
+import com.hawkbrowser.common.Constants;
 import com.hawkbrowser.render.RenderView;
 import com.hawkbrowser.render.RenderViewObserver;
 
@@ -27,14 +29,14 @@ class SystemRenderObserverAdapter {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-
+            
             for (RenderViewObserver observer : mObservers)
                 observer.didStartLoading(mRenderView, url);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
-
+            
             for (RenderViewObserver observer : mObservers)
                 observer.didStopLoading(mRenderView, url);
         }

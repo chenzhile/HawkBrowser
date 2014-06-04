@@ -680,4 +680,6 @@
 	<string name="file">文件</string>
 	<string name="system_render">系统内核</string>
     <string name="chrome_render">Chrome 内核</string>
+    <string name="day_mode">白天模式</string>
+    <string name="incognito">无痕浏览</string>
 </resources>

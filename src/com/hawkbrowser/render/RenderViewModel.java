@@ -3,6 +3,7 @@ package com.hawkbrowser.render;
 import android.content.Context;
 
 import com.hawkbrowser.R;
+import com.hawkbrowser.common.Constants;
 import com.hawkbrowser.render.chrome.ChromeRenderView;
 import com.hawkbrowser.render.system.SystemRenderView;
 
@@ -44,10 +45,17 @@ public class RenderViewModel {
         mRenderViews.clear();
     }
     
-    public void setBackgroundColor(int color) {
+    public void enterNightMode() {
         
         for (RenderView view : mRenderViews) {
-            view.setBackgroundColor(color);
+            view.evaluateJavascript(Constants.NIGHT_MODE_JS, null);
+        }
+    }
+    
+    public void enterDayMode() {
+        
+        for (RenderView view : mRenderViews) {
+            view.evaluateJavascript(Constants.DAY_MODE_JS, null);
         }
     }
 }

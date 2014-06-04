@@ -2,6 +2,7 @@
 package com.hawkbrowser.browser.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -22,7 +23,7 @@ import com.hawkbrowser.common.Constants;
 import com.hawkbrowser.common.Util;
 import com.hawkbrowser.render.RenderView;
 import com.hawkbrowser.render.RenderViewHolderObserver;
-import com.hawkbrowser.render.RenderViewObserverImpl;
+import com.hawkbrowser.render.SingleRenderViewObserver;
 
 public class LocationBar extends LinearLayout
         implements View.OnClickListener, TextWatcher, RenderViewHolderObserver {
@@ -34,7 +35,7 @@ public class LocationBar extends LinearLayout
         Search
     }
 
-    class LocationBarRenderViewObserver extends RenderViewObserverImpl {
+    class LocationBarRenderViewObserver extends SingleRenderViewObserver {
 
         @Override
         public void onUpdateUrl(RenderView view, String url) {
@@ -92,23 +93,27 @@ public class LocationBar extends LinearLayout
     public LocationBar(Context context) {
         this(context, null);
     }
-    
+
     public void enterNightMode() {
-        
+
         int bgColor = getContext().getResources().getColor(R.color.night_mode_bg_default);
-        
+
         findViewById(R.id.locationbar_top).setBackgroundColor(bgColor);
         mInput.setBackgroundColor(bgColor);
-        
+
+        int textColor = getContext().getResources().getColor(R.color.night_mode_text_color);
+        mInput.setTextColor(textColor);
     }
-    
+
     public void enterDayMode() {
-        
+
         int locationBarBg = getContext().getResources().getColor(R.color.location_bar_bg);
         findViewById(R.id.locationbar_top).setBackgroundColor(locationBarBg);
-     
+
         int inputBgColor = getContext().getResources().getColor(R.color.day_mode_bg_default);
         mInput.setBackgroundColor(inputBgColor);
+
+        mInput.setTextColor(Color.BLACK);
     }
 
     private void init() {

@@ -4,7 +4,6 @@ package com.hawkbrowser.browser;
 import android.util.Log;
 
 import com.hawkbrowser.common.Config;
-import com.hawkbrowser.common.Setting;
 
 import org.chromium.base.BaseSwitches;
 import org.chromium.base.CommandLine;
@@ -30,7 +29,7 @@ public class HawkBrowserApplication extends ChromiumApplication {
         // We want to do this at the earliest possible point in startup.
         super.onCreate();
 
-        if (Setting.UseChromeRender) {
+        if (BrowserSetting.UseChromeRender) {
             
             initChromeResource();
             waitForDebuggerIfNeeded();
@@ -50,7 +49,7 @@ public class HawkBrowserApplication extends ChromiumApplication {
 
     public static void initCommandLine() {
 
-        if (Setting.UseChromeRender) {
+        if (BrowserSetting.UseChromeRender) {
             if (!CommandLine.isInitialized())
                 CommandLine.initFromFile(COMMAND_LINE_FILE);
         }
@@ -58,7 +57,7 @@ public class HawkBrowserApplication extends ChromiumApplication {
 
     private void waitForDebuggerIfNeeded() {
 
-        if (Setting.UseChromeRender) {
+        if (BrowserSetting.UseChromeRender) {
             if (CommandLine.getInstance().hasSwitch(BaseSwitches.WAIT_FOR_JAVA_DEBUGGER)) {
 
                 if (Config.LOG_ENABLED)

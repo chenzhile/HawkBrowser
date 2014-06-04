@@ -2,17 +2,21 @@
 package com.hawkbrowser.browser.ui;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hawkbrowser.R;
+import com.hawkbrowser.browser.BrowserSetting;
 import com.hawkbrowser.common.Util;
 import com.hawkbrowser.render.RenderView;
 import com.hawkbrowser.render.RenderViewHolderObserver;
-import com.hawkbrowser.render.RenderViewObserverImpl;
+import com.hawkbrowser.render.SingleRenderViewObserver;
 
 public class Toolbar extends LinearLayout implements View.OnClickListener, RenderViewHolderObserver {
 
@@ -24,11 +28,13 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
 
     public interface Observer {
         void onExit();
+
         void onSwitchRender();
+
         void onDayNightMode();
     }
 
-    private RenderViewObserverImpl mRenderViewObserver = new RenderViewObserverImpl() {
+    private SingleRenderViewObserver mRenderViewObserver = new SingleRenderViewObserver() {
 
         @Override
         public void didStopLoading(RenderView view, String url) {
@@ -93,7 +99,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
 
         @Override
         public void onNightMode() {
-            if(null != mToolbarObserver)
+            if (null != mToolbarObserver)
                 mToolbarObserver.onDayNightMode();
         }
 
@@ -114,10 +120,10 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
             // TODO Auto-generated method stub
 
         }
-        
+
         @Override
         public void onSwitchRender() {
-            if(null != mToolbarObserver)
+            if (null != mToolbarObserver)
                 mToolbarObserver.onSwitchRender();
         }
     };
@@ -130,23 +136,30 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
         super(context, attrs);
         init();
     }
-    
+
     public void enterNightMode() {
-        
+
         int bgColor = getContext().getResources().getColor(R.color.night_mode_bg_default);
         setBackgroundColor(bgColor);
-        
-        mPopupMenuBar.enterNightMode();
+
+        TextView textView = (TextView) findViewById(R.id.toolbar_selectview_text);
+        textView.setTextColor(getContext().getResources().getColor(R.color.night_mode_text_color));
+
+        if(null != mPopupMenuBar)
+            mPopupMenuBar.enterNightMode();
     }
-    
+
     public void enterDayMode() {
-        
+
         int bgColor = getContext().getResources().getColor(R.color.day_mode_bg_default);
         setBackgroundColor(bgColor);
-        
+
+        TextView textView = (TextView) findViewById(R.id.toolbar_selectview_text);
+        textView.setTextColor(Color.BLACK);
+
         mPopupMenuBar.enterDayMode();
     }
-    
+
     private void init() {
 
         inflate(getContext(), R.layout.toolbar, this);
@@ -200,16 +213,19 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
     private void onToolbarMenu() {
 
         if (null == mPopupMenuBar) {
-            if(null == mRenderViewObserver.renderView())
+            if (null == mRenderViewObserver.renderView())
                 return;
-            
+
             int progressBarHeight = getContext().getResources().getDimensionPixelSize(
                     R.dimen.locationbar_progressbar_height);
-            
+
             View renderView = mRenderViewObserver.renderView().getView();
-            mPopupMenuBar = new PopupMenuBar(getContext(), renderView.getWidth(), 
+            mPopupMenuBar = new PopupMenuBar(getContext(), renderView.getWidth(),
                     renderView.getHeight() + progressBarHeight,
                     mPopupMenuBarObserver);
+            
+            if(BrowserSetting.InNightMode)
+                mPopupMenuBar.enterNightMode();
         }
 
         if (mPopupMenuBar.isShow())
@@ -252,7 +268,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
         mBack.setEnabled(view.canGoBack());
         mForward.setEnabled(view.canGoForward());
     }
-    
+
     public void destroy() {
         mToolbarObserver = null;
     }
