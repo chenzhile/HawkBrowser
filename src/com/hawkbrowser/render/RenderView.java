@@ -2,7 +2,6 @@
 package com.hawkbrowser.render;
 
 import android.view.View;
-import android.webkit.ValueCallback;
 
 import java.util.ArrayList;
 import java.util.List;

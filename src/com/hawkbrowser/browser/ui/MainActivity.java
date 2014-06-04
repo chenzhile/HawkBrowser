@@ -2,8 +2,6 @@
 package com.hawkbrowser.browser.ui;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,20 +9,19 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.hawkbrowser.R;
-import com.hawkbrowser.browser.HawkBrowserApplication;
 import com.hawkbrowser.browser.BrowserSetting;
+import com.hawkbrowser.browser.HawkBrowserApplication;
 import com.hawkbrowser.common.Config;
 import com.hawkbrowser.common.Constants;
+import com.hawkbrowser.render.EmptyRenderViewObserver;
 import com.hawkbrowser.render.RenderView;
 import com.hawkbrowser.render.RenderViewHolder;
 import com.hawkbrowser.render.RenderViewModel;
 import com.hawkbrowser.render.RenderViewObserver;
-import com.hawkbrowser.render.EmptyRenderViewObserver;
 
 import org.chromium.content.browser.BrowserStartupController;
 import org.chromium.content.browser.ContentView;
@@ -44,16 +41,11 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     private View mNightModeLayer;
 
     private RenderViewObserver mRenderViewObserver = new EmptyRenderViewObserver() {
-
+       
         @Override
-        public void didStartLoading(RenderView view, String url) {
-            if (BrowserSetting.InNightMode)
-                view.evaluateJavascript(Constants.NIGHT_MODE_JS, null);
-        }
-
-        @Override
-        public void didStopLoading(RenderView view, String url) {
-            if (BrowserSetting.InNightMode)
+        public void onLoadProgressChanged(RenderView view, int progress) { 
+            
+            if (progress > 0 && BrowserSetting.InNightMode)
                 view.evaluateJavascript(Constants.NIGHT_MODE_JS, null);
         }
     };

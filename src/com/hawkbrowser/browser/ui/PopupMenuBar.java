@@ -74,7 +74,6 @@ public class PopupMenuBar implements View.OnClickListener,
 
         nightModeBtn.setText(R.string.night_mode);
 
-        int textColor = mView.getContext().getResources().getColor(R.color.night_mode_text_color);
         changeAllButtonTextColor(mLeftView, Color.BLACK);
         changeAllButtonTextColor(mRightView, Color.BLACK);
     }
@@ -266,31 +265,31 @@ public class PopupMenuBar implements View.OnClickListener,
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-        final int distance = 20;
+        final int distance = 0;
 
         if (e2.getX() - e1.getX() > distance && mViewFlipper.getCurrentView() == mRightView) {
-
-            mViewFlipper.setInAnimation(mView.getContext(), R.anim.popup_menubar_push_left_in);
-            mViewFlipper.setOutAnimation(mView.getContext(), R.anim.popup_menubar_push_right_out);
-            mViewFlipper.showPrevious();
 
             ObjectAnimator animation = ObjectAnimator.ofFloat(mLeftSpinner, "X",
                     mLeftSpinner.getWidth(), 0).setDuration(mAnimationDuration);
 
             animation.start();
+            
+            mViewFlipper.setInAnimation(mView.getContext(), R.anim.popup_menubar_push_left_in);
+            mViewFlipper.setOutAnimation(mView.getContext(), R.anim.popup_menubar_push_right_out);
+            mViewFlipper.showPrevious();
 
             return true;
 
         } else if (e2.getX() - e1.getX() < -distance && mViewFlipper.getCurrentView() == mLeftView) {
 
-            mViewFlipper.setInAnimation(mView.getContext(), R.anim.popup_menubar_push_right_in);
-            mViewFlipper.setOutAnimation(mView.getContext(), R.anim.popup_menubar_push_left_out);
-            mViewFlipper.showNext();
-
             ObjectAnimator animation = ObjectAnimator.ofFloat(mLeftSpinner, "X",
                     0, mLeftSpinner.getWidth()).setDuration(mAnimationDuration);
 
             animation.start();
+            
+            mViewFlipper.setInAnimation(mView.getContext(), R.anim.popup_menubar_push_right_in);
+            mViewFlipper.setOutAnimation(mView.getContext(), R.anim.popup_menubar_push_left_out);
+            mViewFlipper.showNext();
 
             return true;
         }

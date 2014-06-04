@@ -89,6 +89,11 @@ public class SystemRenderView extends RenderView {
             ValueCallbackAdapter adapter = new ValueCallbackAdapter(resultCallback);
             mWebView.evaluateJavascript(script, adapter);
         } else {
+            /**
+             * For pre-KitKat+ you should use loadUrl("javascript:<JS Code Here>");
+             * To then call back to Java you would need to use addJavascriptInterface()
+             * and have your JS call the interface
+             **/
             mWebView.loadUrl("javascript:"+ script);
         }
     }

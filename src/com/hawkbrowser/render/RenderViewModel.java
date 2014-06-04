@@ -2,7 +2,6 @@ package com.hawkbrowser.render;
 
 import android.content.Context;
 
-import com.hawkbrowser.R;
 import com.hawkbrowser.common.Constants;
 import com.hawkbrowser.render.chrome.ChromeRenderView;
 import com.hawkbrowser.render.system.SystemRenderView;
