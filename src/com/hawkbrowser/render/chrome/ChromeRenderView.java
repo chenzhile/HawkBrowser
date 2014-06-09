@@ -7,6 +7,7 @@ import com.hawkbrowser.render.RenderView;
 import com.hawkbrowser.render.ValueCallbackAdapter;
 
 import org.chromium.chrome.hawkbrowser.HawkBrowserTab;
+import org.chromium.content.browser.ContentSettings;
 
 public class ChromeRenderView extends RenderView {
 
@@ -81,6 +82,10 @@ public class ChromeRenderView extends RenderView {
     @Override
     public void blockImage(boolean flag) {
         
+        ContentSettings settings = mImpl.getContentViewCore().getContentSettings();
+        
+        settings.setImagesEnabled(!flag);
+        settings.setLoadsImagesAutomatically(!flag);        
     }
     
     @Override
