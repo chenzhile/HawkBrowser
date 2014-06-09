@@ -45,7 +45,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
         @Override
         public void onLoadProgressChanged(RenderView view, int progress) { 
             
-            if (progress > 0 && BrowserSetting.InNightMode)
+            if (progress > 0 && BrowserSetting.get().getNightMode())
                 view.evaluateJavascript(Constants.NIGHT_MODE_JS, null);
         }
     };
@@ -55,7 +55,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         super.onCreate(savedInstanceState);
 
-        if (BrowserSetting.UseChromeRender)
+        if (BrowserSetting.get().getUseChromeRender())
             initChrome(savedInstanceState);
         else {
             setContentView(R.layout.main);
@@ -68,8 +68,8 @@ public class MainActivity extends Activity implements Toolbar.Observer {
         initUI();
         startRender();
         
-        if (BrowserSetting.InNightMode)
-            processNightModeViews(BrowserSetting.InNightMode);
+        if (BrowserSetting.get().getNightMode())
+            processNightModeViews(BrowserSetting.get().getNightMode());
     }
 
     private void initUI() {
@@ -95,7 +95,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
 
         RenderView renderView;
 
-        if (BrowserSetting.UseChromeRender) {
+        if (BrowserSetting.get().getUseChromeRender()) {
             renderView = mRenderViewModel.createChromeRenderView(this, mWindow);
             mRenderViewHolder.addView(mContentViewRenderView,
                     new FrameLayout.LayoutParams(
@@ -107,6 +107,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
             renderView = mRenderViewModel.createSystemRenderView(this);
         }
 
+        renderView.blockImage(BrowserSetting.get().getImagelessMode());        
         renderView.addObserver(mRenderViewObserver);
         mRenderViewHolder.setCurrentRenderView(renderView);
 
@@ -225,11 +226,11 @@ public class MainActivity extends Activity implements Toolbar.Observer {
         destroyUI();
         destroyRender();
 
-        if (BrowserSetting.UseChromeRender) {
-            BrowserSetting.UseChromeRender = false;
+        if (BrowserSetting.get().getUseChromeRender()) {
+            BrowserSetting.get().setUseChromeRender(false);
             initAfterRenderInit();
         } else {
-            BrowserSetting.UseChromeRender = true;
+            BrowserSetting.get().setUseChromeRender(true);
             initChrome(null);
         }
     }
@@ -237,9 +238,9 @@ public class MainActivity extends Activity implements Toolbar.Observer {
     @Override
     public void onDayNightMode() {
 
-        BrowserSetting.InNightMode = !BrowserSetting.InNightMode;
+        BrowserSetting.get().setNightMode(!BrowserSetting.get().getNightMode());
 
-        processNightModeViews(BrowserSetting.InNightMode);
+        processNightModeViews(BrowserSetting.get().getNightMode());
     }
 
     private void processNightModeViews(boolean inNightMode) {
@@ -255,7 +256,7 @@ public class MainActivity extends Activity implements Toolbar.Observer {
             mLocationBar.enterDayMode();
             mRenderViewModel.enterDayMode();
             mToolbar.enterDayMode();
-        }
+        }   
     }
 
     private void processNightModeLayer(boolean inNightMode) {
@@ -280,5 +281,13 @@ public class MainActivity extends Activity implements Toolbar.Observer {
             if (isLayerAdded)
                 getWindowManager().removeView(mNightModeLayer);
         }
+    }
+    
+    @Override
+    public void onImageMode() {
+        
+        BrowserSetting.get().setImagelessMode(!BrowserSetting.get().getImagelessMode());
+        
+        mRenderViewModel.setImagelessMode(BrowserSetting.get().getImagelessMode());
     }
 }

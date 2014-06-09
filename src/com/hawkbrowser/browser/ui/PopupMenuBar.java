@@ -27,6 +27,8 @@ public class PopupMenuBar implements View.OnClickListener,
     private ViewGroup mLeftView;
     private ViewGroup mRightView;
     private View mLeftSpinner;
+    private Button mSwitchRenderBtn;
+    private Button mImageModeBtn;
     private long mAnimationDuration;
     private PopupWindow mPopup;
     private PopupMenuBarObserver mObserver;
@@ -101,6 +103,9 @@ public class PopupMenuBar implements View.OnClickListener,
 
         mLeftView = (ViewGroup) li.inflate(R.layout.popup_menubar_leftview, null);
         mRightView = (ViewGroup) li.inflate(R.layout.popup_menubar_rightview, null);
+        
+        mSwitchRenderBtn = (Button) mRightView.findViewById(R.id.popup_menubar_render);
+        mImageModeBtn = (Button) mRightView.findViewById(R.id.popup_menubar_noimage);
 
         mAnimationDuration = context.getResources().getInteger(R.integer.popup_menubar_animation_time);
 
@@ -230,16 +235,19 @@ public class PopupMenuBar implements View.OnClickListener,
         if (null == mPopup) {
             mPopup = new PopupWindow(mView, mWidth, mHeight);
 
-            Button switchRenderBtn = (Button) mRightView.findViewById(R.id.popup_menubar_render);
-
-            switchRenderBtn.setCompoundDrawablesWithIntrinsicBounds(0,
-                    BrowserSetting.UseChromeRender ? R.drawable.popup_menubar_chromerender
+            mSwitchRenderBtn.setCompoundDrawablesWithIntrinsicBounds(0,
+                    BrowserSetting.get().getUseChromeRender() ? R.drawable.popup_menubar_chromerender
                             : R.drawable.popup_menubar_systemrender,
                     0, 0);
 
-            switchRenderBtn.setText(BrowserSetting.UseChromeRender
+            mSwitchRenderBtn.setText(BrowserSetting.get().getUseChromeRender()
                     ? R.string.chrome_render : R.string.system_render);
 
+            mImageModeBtn.setCompoundDrawablesWithIntrinsicBounds(0,
+                    BrowserSetting.get().getImagelessMode() ? R.drawable.popup_menubar_noimage_d_p
+                            : R.drawable.popup_menubar_noimage_n,
+                    0, 0);
+            
             mPopup.showAsDropDown(anchor, 0, 0);
         }
     }

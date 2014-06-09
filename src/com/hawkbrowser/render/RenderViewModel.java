@@ -57,4 +57,12 @@ public class RenderViewModel {
             view.evaluateJavascript(Constants.DAY_MODE_JS, null);
         }
     }
+    
+    public void setImagelessMode(boolean flag) {
+        
+        for (RenderView view : mRenderViews) {
+            view.blockImage(flag);
+            view.reload();
+        }
+    }
 }

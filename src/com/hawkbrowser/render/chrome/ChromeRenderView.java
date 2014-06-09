@@ -79,6 +79,11 @@ public class ChromeRenderView extends RenderView {
     }
 
     @Override
+    public void blockImage(boolean flag) {
+        
+    }
+    
+    @Override
     public void destroy() {
         super.destroy();
 

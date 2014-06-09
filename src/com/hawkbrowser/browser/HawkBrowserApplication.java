@@ -29,7 +29,7 @@ public class HawkBrowserApplication extends ChromiumApplication {
         // We want to do this at the earliest possible point in startup.
         super.onCreate();
 
-        if (BrowserSetting.UseChromeRender) {
+        if (BrowserSetting.get().getUseChromeRender()) {
             
             initChromeResource();
             waitForDebuggerIfNeeded();
@@ -49,7 +49,7 @@ public class HawkBrowserApplication extends ChromiumApplication {
 
     public static void initCommandLine() {
 
-        if (BrowserSetting.UseChromeRender) {
+        if (BrowserSetting.get().getUseChromeRender()) {
             if (!CommandLine.isInitialized())
                 CommandLine.initFromFile(COMMAND_LINE_FILE);
         }
@@ -57,7 +57,7 @@ public class HawkBrowserApplication extends ChromiumApplication {
 
     private void waitForDebuggerIfNeeded() {
 
-        if (BrowserSetting.UseChromeRender) {
+        if (BrowserSetting.get().getUseChromeRender()) {
             if (CommandLine.getInstance().hasSwitch(BaseSwitches.WAIT_FOR_JAVA_DEBUGGER)) {
 
                 if (Config.LOG_ENABLED)

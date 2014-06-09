@@ -31,6 +31,8 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
         void onSwitchRender();
 
         void onDayNightMode();
+        
+        void onImageMode();
     }
 
     private SingleRenderViewObserver mRenderViewObserver = new SingleRenderViewObserver() {
@@ -104,8 +106,8 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
 
         @Override
         public void onImagelessMode() {
-            // TODO Auto-generated method stub
-
+            if (null != mToolbarObserver)
+                mToolbarObserver.onImageMode();
         }
 
         @Override
@@ -223,7 +225,7 @@ public class Toolbar extends LinearLayout implements View.OnClickListener, Rende
                     renderView.getHeight() + progressBarHeight,
                     mPopupMenuBarObserver);
             
-            if(BrowserSetting.InNightMode)
+            if(BrowserSetting.get().getNightMode())
                 mPopupMenuBar.enterNightMode();
         }
 

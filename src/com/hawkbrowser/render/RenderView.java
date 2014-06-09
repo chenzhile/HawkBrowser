@@ -35,6 +35,8 @@ public abstract class RenderView {
     public abstract void evaluateJavascript(String script, 
             ValueCallback resultCallback);
     
+    public abstract void blockImage(boolean flag);
+    
     public void addObserver(RenderViewObserver observer) {
         mObservers.add(observer);
     }

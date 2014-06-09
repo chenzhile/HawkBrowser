@@ -22,9 +22,21 @@ public class SystemRenderView extends RenderView {
 
         mWebView = new WebView(context, attrs);
 
-        WebSettings setting = mWebView.getSettings();
-        setting.setJavaScriptEnabled(true);
-        setting.setBuiltInZoomControls(true);
+        WebSettings settings = mWebView.getSettings();
+        
+        settings.setJavaScriptEnabled(true);
+        
+        // Use WideViewport and Zoom out if there is no viewport defined
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+
+        // Enable pinch to zoom without the zoom buttons
+        settings.setBuiltInZoomControls(true);
+
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
+            // Hide the zoom controls for HONEYCOMB+
+            settings.setDisplayZoomControls(false);
+        }
 
         mSystemRenderObserver = new SystemRenderObserverAdapter(this, mWebView, mObservers);
     }
@@ -96,6 +108,12 @@ public class SystemRenderView extends RenderView {
              **/
             mWebView.loadUrl("javascript:"+ script);
         }
+    }
+    
+    @Override
+    public void blockImage(boolean flag) {
+        mWebView.getSettings().setBlockNetworkImage(flag);
+        mWebView.getSettings().setLoadsImagesAutomatically(!flag);
     }
 
     @Override
